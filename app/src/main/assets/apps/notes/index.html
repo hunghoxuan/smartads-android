@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html manifest="notes.manifest">
+  <head>
+    <title>My Notes</title>
+    <meta name="viewport" 
+          content="width=device-width, minimum-scale=1.0, maximum-scale=1.0" />
+          
+  </head>
+  <style>
+  ul{list-style: none; margin: 10px 0 0 0; padding: 0;}
+  ul li{list-style: none; padding: 4px;}
+  
+  li{
+    border: 1px solid #000;
+    border-top: none;
+  }
+
+  li:first-child{border-top: 1px solid #000;}
+  
+  @media screen and (max-device-width: 480px){ 
+
+    body{
+      -webkit-text-size-adjust:none;
+    }
+    
+    #new{width: 100%;}
+  
+    
+    #notes, #form{
+      width: 98%;
+    }
+    #title, #note{
+      width: 98%;
+    }
+    #note{
+      height: 170px;
+    }
+  
+    li{font-size: 20px;}
+  }
+  
+
+
+  </style>
+  
+  <body>
+    
+    <div id="header">
+      <h1>My Notes</h1>
+    </div>
+    
+    <div id="notes">
+      <input type="button" id="new" value="New">
+      <ul>
+        <!-- note titles will go here -->
+      </ul>
+    </div>
+    
+    <div id="form">
+      <input type="button" id="back" value="Back">
+      
+      <form>
+        <label>Title<br><input id="title" type="text"></label>
+        <br>
+        <label>Note<br><textarea id="note"></textarea></label> 
+      </form>
+    
+      <input type="button" id="save" value="Save">
+      <input type="button" id="delete" value="Delete">
+      
+    </div>
+    
+  </body>
+  
+  <script src="../../common/jquery.min.js"></script>
+  <script src="../../apps/notes/notes.js"></script>
+  
+  
+</html>

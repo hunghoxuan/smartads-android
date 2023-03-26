@@ -1,0 +1,259 @@
+<!doctype html>
+<html lang="en" prefix="og: http://ogp.me/ns#">
+  <head>
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,700,700i%7CMaitree:200,300,400,600,700&amp;subset=latin-ext" rel="stylesheet">
+
+    <!-- CSS WebSlides -->
+    <link rel="stylesheet" type='text/css' media='all' href="assets/css/webslides.css">
+
+    <!-- Optional - CSS SVG Icons (Font Awesome) -->
+    <link rel="stylesheet" type='text/css' media='all' href="assets/css/svg-icons.css">
+    <link rel="stylesheet" href="../../common/style.css" />
+
+    <!-- FAVICONS -->
+    <link rel="shortcut icon" sizes="16x16" href="assets/images/favicons/favicon.png">
+    <link rel="shortcut icon" sizes="32x32" href="assets/images/favicons/favicon-32.png">
+    <link rel="apple-touch-icon icon" sizes="76x76" href="assets/images/favicons/favicon-76.png">
+    <link rel="apple-touch-icon icon" sizes="120x120" href="assets/images/favicons/favicon-120.png">
+    <link rel="apple-touch-icon icon" sizes="152x152" href="assets/images/favicons/favicon-152.png">
+    <link rel="apple-touch-icon icon" sizes="180x180" href="assets/images/favicons/favicon-180.png">
+    <link rel="apple-touch-icon icon" sizes="192x192" href="assets/images/favicons/favicon-192.png">
+
+  </head>
+  <body>
+
+    <main role="main">
+      <article id="webslides" class="vertical">
+        <!-- Quick Guide
+          - Each parent <section> in the <article id="webslides"> element is an individual slide.
+          - Vertical sliding = <article id="webslides" class="vertical">
+          - <div class="wrap"> = container 90% / <div class="wrap size-50"> = 45%;
+        -->
+
+        <section>
+          <div class="wrap">
+            <h2 style="color:#eee">Please select</h2>
+            <ul class="flexblock features">
+              <li>
+                <div onclick="openScreen('@api')">
+                  <h2>
+                    <span>&rarr;</span>
+                    Mediascreen
+                  </h2>
+                  show images & videos.
+                </div>
+              </li>
+              <li>
+                <div onclick="openScreen('@home')">
+                  <h2>
+                    <svg class="fa-link">
+                      <use xlink:href="#fa-link"></use>
+                    </svg>
+                    Homepage
+                  </h2>
+                  go to homepage.
+                </div>
+              </li>
+
+              <li>
+                <div onclick="openScreen('@menu')">
+                  <h2>
+                    <svg class="fa-text-height">
+                      <use xlink:href="#fa-text-height"></use>
+                    </svg>
+                    Menu
+                  </h2>
+                  delicious Food & Drink.
+                </div>
+              </li>
+              <li>
+                <div onclick="openScreen('@menu1')">
+                  <h2>
+                    <svg class="fa-text-height">
+                      <use xlink:href="#fa-text-height"></use>
+                    </svg>
+                    Menu 1
+                  </h2>
+                  delicious Food & Drink.
+                </div>
+              </li>
+              <li>
+                <div onclick="openScreen('@games?content_id=105')">
+                  <h2>
+                    <span>G<sup>+</sup></span>
+                    Games
+                  </h2>
+                  chess, cards, cut a rope...
+                </div>
+              </li>
+              <li>
+                <div onclick="openScreen('@galleries2')">
+                  <h2>
+                    <span>&rarr;</span>
+                    Galleries
+                  </h2>
+                  show images & videos.
+                </div>
+              </li>
+              <li>
+                <div onclick="openScreen('@clock')">
+                  <h2>
+                    <svg class="fa-clock-o">
+                      <use xlink:href="#fa-clock-o"></use>
+                    </svg>
+                    Clock
+                  </h2>
+                  local date & time.
+                </div>
+              </li>
+              <li>
+                <div onclick="openScreen('@youtube?v=dz6xe0xXqYE,LPx7ERqFYM0')">
+                  <h2>
+                    Youtube
+                  </h2>
+                  view youtube embed video.
+                </div>
+              </li>
+              <li>
+                <div onclick="openScreen('@https://maps.google.com')">
+                  <h2>
+                    Google Maps
+                  </h2>
+                  explore around here.
+                </div>
+              </li>
+              <li>
+                <div onclick="openScreen('@settings')">
+                  <h2>
+                    Settings
+                  </h2>
+                  manage settings.
+                </div>
+              </li>
+
+
+              <li>
+                <div onclick="openScreen('@logs')">
+                  <h2>
+                    Info
+                  </h2>
+                  show app information.
+                </div>
+              </li>
+
+            </ul>
+            <hr/>
+            <ul class="flexblock features" id="data" name="data">
+            </ul>
+          </div>
+        </section>
+
+        <section class="slide-top">
+          <div class="wrap">
+            <h2 style="color:#eee">Download app from server</h2>
+                <ul class="flexblock features" id="data1" name="data1">
+            </div>
+        </section>
+
+        <section class="slide-bottom">
+          <div class="wrap">
+            <div class="content-right text-serif" style="color:#eee">
+              <h2>
+                <strong>SMARTADS</strong>
+                <a target="_blank" title="Share on Twitter" href="#">
+                  <svg class="fa-twitter">
+                    <use xlink:href="#fa-twitter"></use>
+                  </svg>
+                </a>
+              </h2>
+              <p>Interactive kiosk software.</p>
+              <p>Thank you,<br> <a href="https://smartads.vn">@smartads</a>, <a href="https://stech.vn">@stech</a>.</p>
+            </div>
+            <!-- .end .content-right -->
+          </div>
+          <!-- .end .wrap -->
+        </section>
+
+      </article>
+      <!-- end article -->
+    </main>
+    <!-- end main -->
+
+    <script src="../../common/jquery.min.js"></script>
+    <script src="../../common/main.js"></script>
+    <script src="assets/js/site.js"></script>
+    <script type="text/javascript">
+            //alert(Android.getDownloadableAppsJson());
+            var data = getDataFromJson(Android.getLocalAppsJson());
+            if (data.length > 0)
+             {
+               //generate data
+               var control = document.getElementById('data');
+               var html = '';
+               for (let i = 0; i < data.length; i++) {
+                    let content = `<li>
+                                        <div onclick="openScreen('@{url}')">
+                                             <h2>
+                                              {title}
+                                            </h2>
+                                        </div>
+                                    </li>`;
+                    //alert(data[i].url);
+                    content = content.replace('{title}', data[i].title);
+                    content = content.replace('{url}', data[i].url);
+                    html += content;
+               }
+               //alert(html);
+               control.innerHTML = html;
+             }
+
+            data = getDataFromJson(Android.getDownloadableAppsJson());
+
+            if (data.length > 0)
+             {
+               //generate data
+               control = document.getElementById('data1');
+               html = '';
+               for (let i = 0; i < data.length; i++) {
+                    let content = `<li>
+                                        <div onclick="openScreen('@{url}')">
+                                             <h2>
+                                              {title}
+                                            </h2>
+                                            {description}
+                                        </div>
+                                    </li>`;
+                    //alert(data[i].url);
+                    content = content.replace('{title}', data[i].title);
+                    content = content.replace('{url}', data[i].url);
+                    content = content.replace('{description}', data[i].description + ' ' + data[i].modified_date);
+
+                    html += content;
+               }
+               //alert(html);
+               control.innerHTML = html;
+             }
+
+
+    </script>
+
+   <!-- A global footer
+
+     <footer role="contentinfo">
+      <div class="wrap">
+        <p>An <a href="https://github.com/webslides/webslides">open source solution</a>, by <a href="https://twitter.com/webslides">@webslides</a>.</p>
+      </div>
+    </footer>  -->
+
+    <!-- Required -->
+    <script src="assets/js/webslides.js"></script>
+    <script>
+      window.ws = new WebSlides();
+    </script>
+
+    <!-- OPTIONAL - svg-icons.js (fontastic.me - Font Awesome as svg icons) -->
+    <script defer src="assets/js/svg-icons.js"></script>
+
+  </body>
+</html>

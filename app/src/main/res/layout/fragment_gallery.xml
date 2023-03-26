@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<com.daimajia.slider.library.SliderLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/slider"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:layout_above="@+id/lbl_banner"
+    app:auto_cycle="true"
+    app:indicator_visibility="invisible"
+    app:pager_animation="Default"
+    app:pager_animation_span="2000"
+
+    />

@@ -1,0 +1,17 @@
+html,body
+{
+    height: 100%;
+    margin: 0px !important;
+}
+body {
+    background: #0f3854;
+    background: radial-gradient(ellipse at center,  #0a2e38  0%, #000000 70%);
+    background-size: 100%;
+}
+input { -webkit-user-select: text; }
+.w0 {
+    width: 1080px;
+}
+.h0 {
+    height: 1864px;
+}

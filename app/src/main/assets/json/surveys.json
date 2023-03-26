@@ -1,0 +1,89 @@
+{
+  "status": "success",
+  "message":"",
+  "data":[
+    {
+      "id":1,
+      "content": "question 1 : ban thich gi?",
+      "image":"",
+      "type":"TYPE_SINGLE_CHOICE",
+      "answers":[
+        {
+          "key":1,
+          "value": "Game"
+        },
+        {
+          "key":2,
+          "value": "Nguoi yeu"
+        },
+        {
+          "key":3,
+          "value": "The Thao"
+        },
+        {
+          "key":4,
+          "value": "Hoc"
+        }
+      ]
+    },
+    {
+      "id":2,
+      "content": "question 2 : ban thich dien thoai gi?",
+      "image":"",
+      "type":"TYPE_MULTIPLE_CHOICES",
+      "answers":[
+        {
+          "key":1,
+          "value": "Iphone"
+        },
+        {
+          "key":2,
+          "value": "Sam Sung"
+        },
+        {
+          "key":3,
+          "value": "LG"
+        },
+        {
+          "key":4,
+          "value": "Xiaomi"
+        }
+      ]
+    },
+
+    {
+      "id":3,
+      "content": "ban thich gi?",
+      "image":"",
+      "type":"TYPE_SINGLE_CHOICE",
+      "answers":[
+        {
+          "key":1,
+          "value": "Game"
+        },
+        {
+          "key":2,
+          "value": "Nguoi yeu"
+        },
+        {
+          "key":3,
+          "value": "The Thao"
+        },
+        {
+          "key":4,
+          "value": "Hoc"
+        }
+      ]
+    },
+    {
+      "id":4,
+      "content": "Hay cho biet cam nghi cua ban ve he thong?",
+      "image":"<LOGO>",
+      "type":"TYPE_ANSWER_TEXT",
+      "answers":[
+
+      ]
+    }
+
+  ]
+}

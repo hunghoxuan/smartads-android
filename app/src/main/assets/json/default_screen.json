@@ -1,0 +1,87 @@
+{
+  "id": 0,
+  "device_id": "...",
+  "start_time": "00:00",
+  "date": "2018-05-31",
+  "duration": 1,
+  "is_default": 1,
+  "loop": 0,
+  "data": [
+    {
+      "id": 10,
+      "name": "Header",
+      "percentWidth": 100,
+      "percentHeight": 10,
+      "marginTop": 0,
+      "marginLeft": 0,
+      "backgroundColor": "#274e13",
+      "contentLayout": "text",
+      "data": [
+        {
+          "id": 1,
+          "title": "Header: WELCOME TEXT",
+          "url": "",
+          "description": "<LICENSE>",
+          "kind": "number",
+          "duration": 2,
+          "dataType": "text"
+        }
+      ]
+    },
+    {
+      "id": 3,
+      "name": "Main",
+      "percentWidth": 100,
+      "percentHeight": 80,
+      "marginTop": 10,
+      "marginLeft": 0,
+      "backgroundColor": "#ffffff",
+      "contentLayout": "image",
+      "data": [
+        {
+          "id": 10,
+          "title": "",
+          "url": "//android_asset/resources/default_image_1.png",
+          "description": "",
+          "kind": "time",
+          "duration": 5,
+          "dataType": "image"
+        },
+        {
+          "id": 10,
+          "title": "",
+          "url": "//android_asset/resources/default_image_2.jpg",
+          "kind": "time",
+          "duration": 5,
+          "description": "",
+          "dataType": "image"
+        }
+      ]
+    },
+    {
+      "id": 4,
+      "name": "Footer",
+      "percentWidth": 100,
+      "percentHeight": 10,
+      "marginTop": 90,
+      "marginLeft": 0,
+      "backgroundColor": "#000000",
+      "contentLayout": "text",
+      "data": [
+        {
+          "id": 4,
+          "title": "",
+          "url": "",
+          "description": "<LICENSE> - Phần mềm hiển thị Media Thông minh. Liên hệ bản quyền: <AUTHOR>",
+          "kind": "number",
+          "duration": 2,
+          "dataType": "text"
+        }
+      ]
+    }
+  ],
+  "download_files": null,
+  "audio": [
+
+  ]
+}

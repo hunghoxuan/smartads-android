@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <item
+        android:id="@+id/action_video_list_banner"
+        android:orderInCategory="100"
+        android:title="Video, List, Banner"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_slide_banner"
+        android:orderInCategory="101"
+        android:title="Slide and Banner"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_video_slide_banner"
+        android:orderInCategory="101"
+        android:title="Video, Slide, Banner"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_video_webview_banner"
+        android:orderInCategory="101"
+        android:title="Video, Webview, Banner"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_video"
+        android:orderInCategory="101"
+        android:title="Video full screen"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_webview"
+        android:orderInCategory="101"
+        android:title="Webview full screen"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/action_slide"
+        android:orderInCategory="101"
+        android:title="Slide full screen"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_custom_layout"
+        android:orderInCategory="101"
+        android:title="Custom layout screen"
+        app:showAsAction="never" />
+</menu>

@@ -1,0 +1,271 @@
+body { margin: 0px !important;}
+.slide {
+    display: none;
+    position:absolute;
+    height:100%;
+    width:100%;
+    text-align: center;
+    background-color: #cccccc;
+}
+
+/* Slideshow container */
+.slides {
+    width: 100%;
+    height: 100%;
+    position: absolute;
+    margin: auto;
+    background-color: #fefefe;
+}
+
+img {
+    vertical-align: middle;
+    object-fit: contain;
+}
+
+video {
+
+    vertical-align: middle;
+    object-fit: contain;
+}
+
+/* Caption text */
+.text1 {
+    color: #fff;
+    font-weight: lighter;
+    font-size: 2vw;
+    padding: 15px 12px;
+
+    position: absolute;
+    bottom: 0px;
+    width: 100%;
+    text-align: center;
+    background-color: #000;
+    opacity: 0.3;
+
+}
+
+.text {
+    background-color: #000;
+    color: white;
+    font-size: 2vw;
+    font-weight: bold;
+    margin: 0 auto;
+    padding: 10px;
+    width: 100%;
+    text-align: center;
+    position: absolute;
+    bottom: 0%;
+    right: 0%;
+    /*mix-blend-mode: screen; */
+    opacity: 0.3;
+}
+
+/* Number text (1/3 etc) */
+.numbertext {
+    color: #f2f2f2;
+    font-size: 12px;
+    padding: 5px 5px;
+    position: absolute;
+    bottom: 0;
+    right: 0;
+}
+
+.timer {
+    color: #f2f2f2;
+    font-size: 12px;
+    padding: 5px 5px;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+}
+
+/* The dots/bullets/indicators */
+.dot {
+    height: 15px;
+    width: 15px;
+    margin: 0 2px;
+    background-color: #bbb;
+    border-radius: 50%;
+    display: inline-block;
+    transition: background-color 0.6s ease;
+}
+
+.active {
+    background-color: #717171;
+}
+
+/* Fading animation */
+.fade-in {
+    -webkit-animation: fadein 1s linear forwards;
+    animation: fadein 1s linear forwards;
+}
+
+.fade-out {
+    -webkit-animation: fadeout 1s linear forwards;
+    animation: fadeout 1s linear forwards;
+}
+
+.slide-in {
+    -webkit-animation: slidein 1s linear forwards;
+    animation: slidein 1s linear forwards;
+}
+
+.slide-out {
+    -webkit-animation: slideout 1s linear forwards;
+    animation: slideout 1s linear forwards;
+}
+
+.slide-left {
+    -webkit-animation: slideleft 1s linear forwards;
+    animation: slideleft 1s linear forwards;
+}
+
+.slide-right {
+    -webkit-animation: slideright 1s linear forwards;
+    animation: slideright 1s linear forwards;
+}
+
+.grow
+{
+    -webkit-transform: scale(1.3);
+    -ms-transform: scale(1.3);
+    transform: scale(1.3);
+}
+
+@-webkit-keyframes fadein {
+    from {opacity: 0}
+    to {opacity: 1}
+}
+
+@keyframes fadein {
+    from {opacity: 0}
+    to {opacity: 1}
+}
+
+@-webkit-keyframes fadeout {
+    from {opacity: 1}
+    to {opacity: 0}
+}
+
+@keyframes fadeout {
+    from {opacity: 1}
+    to {opacity: 0}
+}
+
+@-webkit-keyframes fadeinout {
+    0%,100% { opacity: 0; }
+    50% { opacity: 1; }
+}
+
+@keyframes fadeinout {
+    0%,100% { opacity: 0; }
+    50% { opacity: 1; }
+}
+
+/* On smaller screens, decrease text size */
+@media only screen and (max-width: 300px) {
+    .text {font-size: 11px}
+}
+
+/* Chrome, Safari, Opera */
+@-webkit-keyframes slidein {
+    0%   {left: 0px; top: -800px;}
+    100% {left: 0px; top: 0px;}
+}
+
+@keyframes slidein {
+    0%   {left: 0px; top: -800px;}
+    100% {left: 0px; top: 0px;}
+}
+
+@keyframes slideout {
+    0%   {left: 0px; top: 0px;}
+    100% {left: 0px; top: 800px;}
+}
+
+@-webkit-keyframes slideout {
+    0%   {left: 0px; top: 0px;}
+    100% {left: 0px; top: 800px;}
+}
+
+@-webkit-keyframes slideleft {
+    0%   {left: -1000px; top: 0px;}
+    100% {left: 0px; top: 0px;}
+}
+
+@keyframes slideleft {
+    0%   {left: -1000px; top: 0px;}
+    100% {left: 0px; top: 0px;}
+}
+
+@keyframes slideright {
+    0%   {left: 0px; top: 0px;}
+    100% {left: 1000px; top: 0px;}
+}
+
+@-webkit-keyframes slideright {
+    0%   {left: 0px; top: 0px;}
+    100% {left: 1000px; top: 0px;}
+}
+
+.rotate {
+    animation: rotate_627320157 2s linear infinite;
+    transform-origin: 50% 50%;
+}
+
+@keyframes rotate_627320157 {
+    0% {
+        transform: perspective(100px)rotate(0deg)
+    }
+    12.5% {
+        transform: perspective(100px)rotateX(180deg)rotateY(0);
+    }
+    25% {
+        transform: perspective(100px)rotateX(180deg)rotateY(180deg);
+    }
+    37.5% {
+        transform: perspective(100px)rotateX(0)rotateY(180deg);
+    }
+    50% {
+        transform: perspective(100px)rotateX(0)rotateY(0);
+    }
+    100% {
+        transform: perspective(100px)rotateX(0)rotateY(0);
+    }
+}
+
+video::-webkit-media-controls-overlay-play-button {
+    display: none !important;
+    opacity: 0;
+}
+
+video::-webkit-media-controls-play-button {
+    display: none !important;
+}
+
+video::-webkit-media-controls{
+    display: none !important;
+    -webkit-appearance: none !important;
+    opacity: 0;
+}
+
+*::-webkit-media-controls-panel {
+    display: none!important;
+    -webkit-appearance: none;
+}
+
+/* Old shadow dom for play button */
+
+*::-webkit-media-controls-play-button {
+    display: none !important;
+    -webkit-appearance: none;
+}
+
+/* New shadow dom for play button */
+
+/* This one works! */
+
+*::-webkit-media-controls-start-playback-button {
+    display: none !important;
+    -webkit-appearance: none;
+}

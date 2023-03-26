@@ -1,0 +1,474 @@
+<html>
+    <head>
+        <link rel="stylesheet" href="../../common/style.css" />
+        <link rel="stylesheet" href="assets/style.css" />
+    </head>
+    <body style="margin: 0px !important;">
+
+        <div id="content">
+            <div id="main" class="main">
+                <div id="slides" class="slides">
+
+<!--                    <div class="slide fade-in" duration="5000" type="image" style="display: none;" id="658">-->
+<!--                        <div></div>-->
+<!--                        <div id="slide_number" class="numbertext">1 / 2</div>-->
+<!--                                <div id="slide_description" class="text">menu1</div>-->
+<!--                            </div>-->
+
+
+<!--                    <div class="slide fade-in" duration="5000" type="image" style="display: block;" id="657">-->
+<!--                        <div><img onclick="pauseSlide()" src="https://stech.vn/smartads/applications/smartads/upload/smartscreen-file/smartscreen_content_87_6__6322d7afbd2e2.jpg" width="100%" height="100%" style="object-fit:cover;width: 100%;height: 100%;"></div>-->
+<!--                        <div id="slide_number" class="numbertext">2 / 2</div>-->
+<!--                            <div id="slide_description" class="text">games</div>-->
+<!--                    </div>-->
+
+                </div>
+                <div id="slide_status" class="numbertext" style=""></div>
+                <div id="slide_video_time" class="timer" style=""><i class="fas fa-clock"></i>&nbsp;0</div>
+
+                <script src="../../common/jquery.min.js"></script>
+                <script src="../../common/main.js"></script>
+                <script src="assets/main.js"></script>
+
+                <script>
+                    //settings
+                    var slideIndex = 0;
+
+                    var timeoutId;
+                    var timeoutId1;
+                    var pause = false;
+                    var defaultTransitionIn =  'fade-in'; //'fade-in', 'slide-in', 'slide-left';
+                    var defaultTransitionOut = 'fade-out'; //'fade-out';
+                    var currentVideoTime = 1;
+                    var transition_when_slide_out = false;
+                    var transition_duration = 1000; //default: 2000
+                    var clearTimeOut = true;
+                    var videoIndex = 0;
+                    var videos = [
+                        'http://103.63.109.98/smartads//applications/smartads/upload/smartscreen-file/smartscreen_content_80_1608922570.mp4',
+                        'http://103.63.109.98/smartads//applications/smartads/upload/smartscreen-file/smartscreen_content_63_1608904690.mp4'
+                    ];
+                    var controls = [];
+                    var files  = [];
+                    var playPromise;
+                    var transition_out;
+                    var transition_in;
+                    var transition;
+                    var addControlDynamically = true;
+
+                    var data = getData();
+                    if (isEmpty(data)) {
+                         data = [
+                            {'url': 'file:///android_asset/images/default_image_1.png', 'description': '', 'title': ''},
+                            {'url': 'file:///android_asset/images/default_image_2.png', 'description': '', 'title': ''},
+                        ];
+                    }
+                    var html = '';
+
+
+                    for (let i = 0; i < data.length; i++) {
+                        var content = '<img onclick="pauseSlide()" src="{url}" width="100%" height="100%" style="object-fit:cover;width: 100%;height: 100%;">';
+                        content = content.replace('{url}', data[i].url);
+
+                        controls.push(content);
+                        files.push(data[i].url);
+
+                        content = '<div class="slide fade-in" duration="5000" type="image" style="display: {display};" id="658"><div></div><div id="slide_number" class="numbertext">{i+1} / {total}</div><div id="slide_description" class="text">{description}</div></div>';
+
+                        content = content.replace('{url}', data[i].url);
+                        content = content.replace('{description}', data[i].title);
+                        content = content.replace('{i+1}', i + 1);
+                        content = content.replace('{total}', data.length);
+                        content = content.replace('{display}', i == 0 ? 'block' : 'none');
+
+                        html += content;
+                    }
+
+                    setHTML('slides', html);
+
+                    var slides = document.getElementsByClassName("slide");
+
+                    window.onload = function() {
+                        document.addEventListener('swiped-left', function(e) {
+                            pause = false;
+                            showStatus('');
+                            currentVideoTime = 0;
+                            slideIndex++;
+                            if (slideIndex > slides.length - 1) { slideIndex = 0 }
+                            showSlides(slideIndex);
+                        });
+
+                        document.addEventListener('swiped-right', function(e) {
+                            pause = false;
+                            showStatus('');
+                            currentVideoTime = 0;
+                            slideIndex = slideIndex - 1;
+                            if (slideIndex < 0) {
+                                slideIndex = slides.length - 1;
+                            }
+                            showSlides(slideIndex);
+                        });
+
+                        document.addEventListener('swiped-up', function(e) {
+                            pause = false;
+                            showStatus('');
+                            currentVideoTime = 0;
+                            if (slideIndex == slides.length - 1)
+                                slideIndex = 0;
+                            else
+                                slideIndex = slides.length - 1;
+                            showSlides(slideIndex);
+                        });
+
+                        document.addEventListener('swiped-down', function(e) {
+                            pause = false;
+                            showStatus('');
+                            currentVideoTime  = 0;
+                            if (slideIndex == 0)
+                                slideIndex =  slides.length -1;
+                            else
+                                slideIndex = 0;
+                            showSlides(slideIndex);
+                        });
+
+                        showSlides(0);
+                    }
+
+                    //window.addEventListener('resize', resize, false);
+                    //resize();
+
+                    function showStatus(content = '') {
+                        var control = document.getElementById('slide_status');
+                        control.innerHTML = content;
+                        return control;
+                    }
+
+                    function showVideoTime(duration = -1) {
+                        if (duration < 0)
+                            duration = currentVideoTime;
+                        var control = document.getElementById('slide_video_time');
+                        control.innerHTML = '<i class="fas fa-clock"></i>&nbsp;' + Math.floor(duration);
+                        return control;
+                    }
+
+                    function resizeObject(video) {
+                        //console.log(video);
+                        videoRatio = video.height / video.width;
+                        windowRatio = window.innerHeight / window.innerWidth; /* browser size */
+
+                        if (windowRatio < videoRatio) {
+                            if (window.innerHeight > 50) { /* smallest video height */
+                                video.height = window.innerHeight;
+                            } else {
+                                video.height = 50;
+                            }
+                        } else {
+                            video.width = window.innerWidth;
+                        }
+                    }
+
+                    function resize() {
+                        var videos = document.getElementsByTagName("video");
+                        for (i = 0; i < videos.length; i++) {
+                            resizeObject(videos[i]);
+                        }
+
+                        var images = document.getElementsByTagName("img");
+                        for (i = 0; i < images.length; i++) {
+                            resizeObject(images[i]);
+                        }
+                    };
+
+                    function pauseVideo(video) {
+                        video.autoplay = false;
+                        if (playPromise !== undefined) {
+                            playPromise.then(_ => {
+                                video.pause();
+                                video.currentTime = currentVideoTime;
+                                video.load();
+                            }).catch(error => {
+                                });
+                        } else {
+                            video.pause();
+                            video.currentTime = currentVideoTime;
+                            video.load();
+                        }
+                    }
+
+                    function playVideo(video) {
+                        video.currentTime = currentVideoTime;
+                        url = files[slideIndex];
+                        //console.log(url);
+                        //return playVideoFromUrl(video, url);
+                        playPromise = video.play();
+                        return playPromise;
+                    }
+
+                    function startVideo(video) {
+                        video.addEventListener("timeupdate", updateTimeVideo, false);
+                        var isPlaying = video.currentTime > 0 && !video.paused && !video.ended
+                            && video.readyState > 2;
+
+                        if (!isPlaying) {
+                            if (!pause) {
+                                playVideo(video);
+                            } else {
+                                pauseVideo(video);
+                            }
+                        } else {
+                            if (pause) {
+                                pauseVideo(video);
+                            } else {
+                            }
+                        }
+                    }
+
+                    var stopVideo = (e) => {
+                        video = e.target;
+                        //console.log(video);
+                        video.pause();
+                        if (!pause)
+                            video.currentTime = 0;
+                        video.removeEventListener('ended', this);
+                        video.removeEventListener('timeupdate', this);
+
+                        showSlides();
+                    };
+
+                    var updateTimeVideo = (e) => {
+                        video = e.target;
+                        currentVideoTime = video.currentTime;
+
+                        showVideoTime();
+                        //console.log(currentVideoTime);
+                    };
+
+                    function getVideoFromSlide(slide) {
+                        video = getControlFromSlide(slide);
+                        video.preload = 'auto';
+                        video.controls = false;
+                        video.removeAttribute('controls');
+                        // if (video.requestFullscreen) {
+                        //     video.requestFullscreen();
+                        // } else if (video.mozRequestFullScreen) {
+                        //     video.mozRequestFullScreen();
+                        // } else if (video.webkitRequestFullscreen) {
+                        //     video.webkitRequestFullscreen();
+                        // } else if (video.msRequestFullscreen) {
+                        //     video.msRequestFullscreen();
+                        // }
+                        return video;
+                    }
+
+                    function playVideoFromUrl(video, url = '') {
+                        if (url == '')
+                        {
+                            url = video.currentSrc;
+                        }
+                        fetch(url)
+                            .then(response => response.blob())
+                            .then(blob => {
+                                video.srcObject = blob;
+                                playPromise = video.play();
+                                return playPromise;
+                            })
+                            .then(_ => {
+                                return playPromise;
+                            })
+                            .catch(e => {
+                                playPromise = video.play();
+                                return playPromise;
+                            })
+                    }
+
+                    function pauseSlide() {
+                        if (!pause)
+                            pause = true;
+                        else
+                            pause = false;
+
+                        if (timeoutId > 0 && clearTimeOut) {
+                            clearTimeout(timeoutId);
+                        }
+                        if (timeoutId1 > 0 && clearTimeOut) {
+                            clearTimeout(timeoutId1);
+                        }
+                        if (pause) {
+                            showStatus('<div style="background-color:red"> &nbsp;Paused&nbsp; </div>');
+                        } else {
+                            showStatus('');
+                        }
+                        showSlides(slideIndex);
+                    }
+
+                    (function(window,document){'use strict';if('initCustomEvent'in document.createEvent('CustomEvent')){window.CustomEvent=function(event,params){params=params||{bubbles:false,cancelable:false,detail:undefined};var evt=document.createEvent('CustomEvent');evt.initCustomEvent(event,params.bubbles,params.cancelable,params.detail);return evt;};window.CustomEvent.prototype=window.Event.prototype;}
+                        document.addEventListener('touchstart',handleTouchStart,false);document.addEventListener('touchmove',handleTouchMove,false);document.addEventListener('touchend',handleTouchEnd,false);var xDown=null;var yDown=null;var xDiff=null;var yDiff=null;var timeDown=null;var startEl=null;function handleTouchEnd(e){if(startEl!==e.target)return;var swipeThreshold=parseInt(startEl.getAttribute('data-swipe-threshold')||'20',10);var swipeTimeout=parseInt(startEl.getAttribute('data-swipe-timeout')||'500',10);var timeDiff=Date.now()-timeDown;var eventType='';if(Math.abs(xDiff)>Math.abs(yDiff)){if(Math.abs(xDiff)>swipeThreshold&&timeDiff<swipeTimeout){if(xDiff>0){eventType='swiped-left';}
+                        else{eventType='swiped-right';}}}
+                        else{if(Math.abs(yDiff)>swipeThreshold&&timeDiff<swipeTimeout){if(yDiff>0){eventType='swiped-up';}
+                        else{eventType='swiped-down';}}}
+                            if(eventType!==''){startEl.dispatchEvent(new CustomEvent(eventType,{bubbles:true,cancelable:true}));if(console&&console.log)console.log(eventType+' fired on '+startEl.tagName);}
+                            xDown=null;yDown=null;timeDown=null;}
+                        function handleTouchStart(e){if(e.target.getAttribute('data-swipe-ignore')==='true')return;startEl=e.target;timeDown=Date.now();xDown=e.touches[0].clientX;yDown=e.touches[0].clientY;xDiff=0;yDiff=0;}
+                        function handleTouchMove(e){if(!xDown||!yDown)return;var xUp=e.touches[0].clientX;var yUp=e.touches[0].clientY;xDiff=xDown-xUp;yDiff=yDown-yUp;}}(this,document));
+
+                    const loadVideo = file => new Promise((resolve, reject) => {
+                        try {
+                            let video = document.createElement('video')
+                            video.preload = 'auto'
+
+                            video.onloadedmetadata = function () {
+                                resolve(this)
+                            }
+
+                            video.onerror = function () {
+                                reject("Invalid video. Please select a video file.")
+                            }
+
+                            video.src = window.URL.createObjectURL(file)
+                        } catch (e) {
+                            reject(e)
+                        }
+                        return video;
+                    });
+
+                    function getControlFromSlide(slide) {
+                        return slide.children[0].children[0];
+                    }
+
+                    function startSlide(slide, type) {
+                        slide.style.display = "block";
+                        var control = controls[slideIndex];
+                        if (addControlDynamically && control) {
+                           slide.children[0].innerHTML = control;
+                        }
+
+                        transition_out = slide.getAttribute("transition-out");
+                        transition_in = slide.getAttribute("transition-in");
+                        transition = slide.getAttribute("transition");
+
+                        if (transition_in == '' || transition_in == null)
+                            transition_in = transition == null ? defaultTransitionIn : transition;
+
+                        if (transition_out == '' || transition_out == null)
+                            transition_out = transition == null ? defaultTransitionOut : transition;
+
+                        return slide;
+                    }
+
+                    function startTransitionSlide(slide) {
+                        var transition_in = slide.getAttribute("transition-in");
+                        var transition = slide.getAttribute("transition");
+
+                        if (transition_in == '' || transition_in == null)
+                            transition_in = transition == null ? defaultTransitionIn : transition;
+                        slide.setAttribute('class', 'slide ' + transition_in);
+                        return slide;
+                    }
+
+                    function stopTransitionSlide(slide) {
+                        slide.setAttribute('class', 'slide ' + transition_out);
+                        return slide;
+                    }
+
+                    function stopSlide(slide, type) {
+                        slide.style.display = "none";
+                        if (addControlDynamically) {
+                            slide.children[0].innerHTML = null;
+                        }
+                        if (type == 'video') {
+                            var video = getControlFromSlide(slide);
+                            if (video) {
+                                pauseVideo(video);
+                                if (!pause) {
+                                    video.currentTime = 0;
+                                    currentVideoTime = 0;
+                                }
+                            }
+                        }
+                        return slide;
+                    }
+
+                    function showSlides(_slideIndex = -1) {
+
+                        var i;
+                        var slide;
+                        var type;
+                        var duration;
+
+                        if (timeoutId > 0 && clearTimeOut) {
+                            clearTimeout(timeoutId);
+                        }
+                        if (timeoutId1 > 0 && clearTimeOut) {
+                            clearTimeout(timeoutId1);
+                        }
+
+                        //prepare slides
+                        for (i = 0; i < slides.length; i++) {
+                            slide = slides[i];
+                            //console.log(slide);
+                            type = slide.getAttribute("type");
+                            stopSlide(slide, type);
+                            startTransitionSlide(slide);
+                        }
+
+                        // next slide
+                        if (_slideIndex >= 0) {
+                            slideIndex = _slideIndex;
+                            if (!pause)
+                                currentVideoTime = 0;
+                        } else {
+                            slideIndex++;
+                            if (slideIndex > slides.length - 1) {
+                                slideIndex = 0
+                            }
+                            if (!pause)
+                                currentVideoTime = 0;
+                        }
+                        showVideoTime();
+
+                        slide = slides[slideIndex];
+
+                        duration = slide.getAttribute("duration");
+                        type = slide.getAttribute("type");
+
+                        startSlide(slide, type);
+
+                        if (type == 'video') {
+                            video = getVideoFromSlide(slide);
+
+                            if (duration == 0 && slides.length > 1) { //auto detect duration from video
+                                video.loop = false; //if not --> never ended
+                                video.addEventListener('durationchange', function() {
+                                    this.parentNode.parentNode.setAttribute("duration", (this.duration * 1000));
+                                });
+                                video.addEventListener('ended', stopVideo, false);
+                                startVideo(video);
+                            } else {
+                                startVideo(video);
+                            }
+                        } else if (type == 'marquee') {
+                            text = getControlFromSlide(slide);
+                            text.start();
+                        }
+
+                        if (duration > 0 && !pause && slides.length > 1) {
+                            //console.log('Clear Time Out' + timeoutId);
+                            timeoutId = setTimeout(() => {
+
+                                stopTransitionSlide(slide);
+                                if (slides.length == 1 || transition_duration == 0) { //only 1 item -> dont need transition
+                                    showSlides();
+                                } else {
+                                    timeoutId1 = setTimeout(() => {
+                                        //finish slide, start new slide
+                                        showSlides();
+                                    }, transition_duration);
+                                }
+                            }, duration);
+                        }
+                    }
+                </script>
+            </div>
+        </div>
+    </body>
+</html>

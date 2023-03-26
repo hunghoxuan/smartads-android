@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:id="@+id/main_setting_layout"
+    tools:context="com.stech.smartads.activities.SettingActivity">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:background="@color/white"
+        android:layout_centerInParent="true"
+        android:gravity="center_horizontal"
+        android:padding="@dimen/dimen_2x"
+        android:layout_marginLeft="@dimen/dimen_3x"
+        android:layout_marginRight="@dimen/dimen_3x"
+        android:orientation="vertical"
+        android:layout_height="wrap_content">
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_marginTop="@dimen/dimen_1x"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+
+            android:textSize="@dimen/text_size_huge"
+            android:textStyle="bold"
+            android:text="SETTING" />
+
+        <LinearLayout
+            android:layout_marginTop="@dimen/dimen_2x"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
+
+            <TextView
+                android:background="@color/grey"
+                android:layout_width="240dp"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_size_large"
+                android:textStyle="normal"
+                android:text="API Server:" />
+
+            <EditText
+                android:id="@+id/txtAddressIp"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:lines="1"
+                android:imeOptions="actionDone"
+                android:layout_marginLeft="@dimen/dimen_1x"
+                android:layout_marginRight="@dimen/dimen_1x"
+                android:hint="Device name"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="@dimen/dimen_2x"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:orientation="horizontal">
+
+            <TextView
+                android:background="@color/grey"
+                android:layout_width="240dp"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_size_large"
+                android:textStyle="normal"
+                android:text="Homepage URL:" />
+
+            <EditText
+                android:id="@+id/txtHomepage"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:lines="1"
+                android:imeOptions="actionDone"
+                android:layout_marginLeft="@dimen/dimen_1x"
+                android:layout_marginRight="@dimen/dimen_1x"
+                android:hint="Device name"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="@dimen/dimen_2x"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:orientation="horizontal">
+
+            <TextView
+                android:background="@color/grey"
+                android:layout_width="240dp"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_size_large"
+                android:textStyle="normal"
+                android:text="Device Name:" />
+
+            <EditText
+                android:id="@+id/txtDeviceName"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:lines="1"
+                android:imeOptions="actionDone"
+                android:layout_marginLeft="@dimen/dimen_1x"
+                android:layout_marginRight="@dimen/dimen_1x"
+                android:hint="Device name"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_marginTop="@dimen/dimen_2x"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:orientation="horizontal">
+
+            <TextView
+                android:background="@color/grey"
+                android:layout_width="240dp"
+                android:layout_height="wrap_content"
+                android:textSize="@dimen/text_size_large"
+                android:textStyle="normal"
+                android:text="Note:" />
+
+            <EditText
+                android:id="@+id/txtDeviceDescription"
+                android:layout_width="fill_parent"
+                android:layout_height="wrap_content"
+                android:lines="1"
+                android:imeOptions="actionDone"
+                android:layout_marginLeft="@dimen/dimen_1x"
+                android:layout_marginRight="@dimen/dimen_1x"
+                android:hint="Description"/>
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:layout_marginTop="@dimen/dimen_3x"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="left"
+            android:orientation="horizontal">
+
+            <Button
+                android:id="@+id/btnLogin"
+                android:textColor="@color/white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/dimen_1x"
+                android:background="@color/colorPrimary"
+                android:text="START APP"/>
+
+            <Button
+                android:id="@+id/btnUpdateVersion"
+                android:textColor="@color/white"
+                android:layout_width="wrap_content"
+                android:layout_marginLeft="@dimen/dimen_1x"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/dimen_1x"
+                android:background="@color/textColorSecondary"
+                android:text="UPGRADE APP"/>
+
+            <Button
+                android:id="@+id/btnExit"
+                android:textColor="@color/white"
+                android:layout_width="wrap_content"
+                android:layout_marginLeft="@dimen/dimen_1x"
+                android:layout_height="wrap_content"
+                android:padding="@dimen/dimen_1x"
+                android:background="@color/textColorSecondary"
+                android:text="EXIT"/>
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+    <TextView
+        android:id="@+id/lblVersion"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginLeft="@dimen/dimen_1x"
+        android:layout_marginBottom="@dimen/dimen_1x"
+        android:textColor="@color/textColorSecondary"
+        android:textSize="@dimen/text_size_normal"/>
+
+</RelativeLayout>

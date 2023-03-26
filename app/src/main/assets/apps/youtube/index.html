@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <style>
+        iframe   { border: 0; position:fixed; width:100%; height:100%; }
+        body { margin: 0px !important; padding: 0px !important }
+    </style>
+</head>
+<body>
+<div id="player"></div>
+<script src="../../common/jquery.min.js"></script>
+<script src="../../common/main.js"></script>
+<script>
+      // 2. This code loads the IFrame Player API code asynchronously.
+      var tag = document.createElement('script');
+      var timeout = 0;
+
+
+      var videoId = getUrlParam(['v', 'id', 'videoId'], '2jqok-WgelI');
+      videoId = videoId.split(',');
+      //alert(location.href + ' ==> videoid:' + videoId[0]);
+
+      var startSeconds = getUrlParam('startSeconds', 0);
+      var endSeconds = getUrlParam('endSeconds', 0);
+      var vlistType = getUrlParam('listType', 'playlist');
+
+      var controls = getUrlParam('controls', 0);
+      var videoIndex = 0;
+
+      tag.src = "https://www.youtube.com/iframe_api";
+      var firstScriptTag = document.getElementsByTagName('script')[0];
+      firstScriptTag.parentNode.insertBefore(tag, firstScriptTag);
+
+      function startPlaylist(_videoPlaylist) {
+        player.loadPlaylist({playlist: _videoPlaylist, index: 0, autoplay: 1});
+        //player.playVideo();
+      }
+
+      function startVideo(_videoId, _startSeconds, _endSeconds) {
+          if (_videoId.isArray) {
+              player.loadVideoById({'videoId': _videoId[videoIndex],
+                   'startSeconds': _startSeconds,
+                   'endSeconds': _endSeconds,
+                   'suggestedQuality': 'large'});
+          } else {
+              player.loadVideoById({'videoId': _videoId,
+                   'startSeconds': _startSeconds,
+                   'endSeconds': _endSeconds,
+                   'suggestedQuality': 'large'});
+          }
+      }
+
+      function playVideo() {
+         player.seekTo(startSeconds);
+         player.playVideo();
+      }
+
+      function playVideo(_video) {
+         _video.seekTo(startSeconds);
+         _video.playVideo();
+      }
+
+      function stopVideo() {
+         player.stopVideo();
+      }
+
+      // 4. The API will call this function when the video player is ready.
+      function onPlayerReady(e) {
+        //alert('Start: ' + videoIndex + e.data);
+        playVideo(e.event);
+      }
+
+      function onPlayerError(event) {
+      }
+
+      function onPlayerPlaybackQualityChange(event) {
+      }
+
+      // 5. The API calls this function when the player's state changes.
+      //    The function indicates that when playing a video (state=1),
+      //    the player should play for six seconds and then stop.
+      var done = false;
+
+      function onPlayerStateChange(e) {
+        if (e.data == YT.PlayerState.PLAYING && !done && timeout > 0) {
+          //alert('timeout');
+          setTimeout(stopVideo, timeout);
+          done = true;
+        }
+        if (e.data === YT.PlayerState.ENDED || (e.data === YT.PlayerState.PAUSED && endSeconds > 0 && player.getCurrentTime() > endSeconds)) {
+            if (videoIndex == videoId.length - 1)
+                videoIndex = 0;
+            else
+                videoIndex += 1;
+            startVideo(videoId[videoIndex], startSeconds, endSeconds);
+            //playVideo();
+        }
+      }
+
+      // 3. This function creates an <iframe> (and YouTube player)
+      //    after the API code downloads.
+      var player;
+      function onYouTubeIframeAPIReady() {
+        player = new YT.Player('player', {
+          height: 'auto',
+          width: '100%',
+          videoId: videoId[0],
+          playerVars: {
+             listType: vlistType,
+             autoplay: 1,
+             //playlist: 'PLSaac19x1K73ilf4uHaad6-9sf3hjfcI8',
+             enablejsapi: 1,
+            playsinline: 1,
+            controls: controls,
+            showinfo: 0,
+            rel: 0,
+            //loop: 1,
+            modestbranding: 1,
+            vq: 'hd1080',
+            autohide: 1,
+            theme: 'dark'
+          },
+          events: {
+            'onReady': onPlayerReady,
+            'onStateChange': onPlayerStateChange,
+            'onPlaybackQualityChange': onPlayerPlaybackQualityChange,
+            'onError': onPlayerError
+          }
+        });
+      }
+
+
+    </script>
+</body>
+</html>

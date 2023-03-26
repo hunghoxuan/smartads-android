@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <link rel="stylesheet" href="assets/css/style.css" />
+        <link rel="stylesheet" href="assets/css/glightbox.css" />
+    </head>
+
+    <body>
+        <!-- Iframes and inline example -->
+        <section class="section pair">
+            <div class="container">
+                <div class="row">
+                    <div class="col-md-12">
+                        <ul id = "data" name="data" class="box-container three-cols">
+
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+   
+        <script src="assets/js/anime.min.js"></script>
+        <script src="assets/js/valde.min.js"></script>
+        <script src="assets/js/glightbox.js"></script>
+        <script src="assets/js/site.js"></script>
+        <script src="../../common/jquery.min.js"></script>
+        <script src="../../common/main.js"></script>
+
+        <script type="text/javascript">
+            var data = getData();
+
+            if (data.length == 0)
+            data = [
+                 {'url': 'assets/img/fruit-ninja-hd.png', 'description': 'https://freehtml5games.org/games/fruit-ninja-hd/index.html'},
+                 {'url': 'assets/img/fruit-slasher.png', 'description': 'https://freehtml5games.org/games/fruit-slasher/index.html'},
+                 {'url': 'assets/img/superpongoal.png', 'description': 'https://freehtml5games.org/games/superpongoal/index.html'},
+                 {'url': 'assets/img/flappy-ball.png', 'description': 'https://freehtml5games.org/games/flappy-ball/index.html'},
+                 {'url': 'assets/img/christmas-panda-run.png', 'description': 'https://freehtml5games.org/games/christmas-panda-run/index.html'},
+                 {'url': 'assets/img/ninja-run-2.png', 'description': 'https://freehtml5games.org/games/ninja-run-2/index.html'},
+                 {'url': 'https://freehtml5games.org/icons/duck-shooter.png', 'description': 'https://freehtml5games.org/games/duck-shooter/index.html'},
+            ];
+
+           //generate data
+           var control = document.getElementById('data');
+           var html = '';
+           for (let i = 0; i < data.length; i++) {
+                let content = `<li class='box'>
+                                    <div class='inner'>
+                                        <a href='{url}' class='glightbox4'>
+                                            <img src='{image}' width='100' height='200' alt='image' />
+                                        </a>
+                                    </div>
+                                </li>`;
+                //alert(data[i].url);
+                content = content.replace('{image}', data[i].url);
+                content = content.replace('{url}', data[i].description);
+                html += content;
+           }
+           control.innerHTML = html;
+
+            var lightbox = GLightbox();
+            lightbox.on('open', (target) => {
+                console.log('lightbox opened');
+            });
+            var lightboxDescription = GLightbox({
+                selector: '.glightbox2'
+            });
+            var lightboxVideo = GLightbox({
+                selector: '.glightbox3'
+            });
+            lightboxVideo.on('slide_changed', ({ prev, current }) => {
+                console.log('Prev slide', prev);
+                console.log('Current slide', current);
+
+                const { slideIndex, slideNode, slideConfig, player } = current;
+
+                if (player) {
+                    if (!player.ready) {
+                        // If player is not ready
+                        player.on('ready', (event) => {
+                            // Do something when video is ready
+                        });
+                    }
+
+                    player.on('play', (event) => {
+                        console.log('Started play');
+                    });
+
+                    player.on('volumechange', (event) => {
+                        console.log('Volume change');
+                    });
+
+                    player.on('ended', (event) => {
+                        console.log('Video ended');
+                    });
+                }
+            });
+
+            var lightboxInlineIframe = GLightbox({
+                selector: '.glightbox4'
+            });
+
+
+        </script>
+    </body>
+</html>

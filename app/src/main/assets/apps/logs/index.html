@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+        <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no" />
+        <style>
+            pre {
+                background-color:#E8E2E2;padding:20px;border:1px solid grey;
+            }
+        </style>
+    </head>
+
+    <body style="margin:20px">
+        <script src="../../common/jquery.min.js"></script>
+        <script src="../../common/main.js"></script>
+        <script type="text/javascript">
+            var data = Android.getCachedSchedulesJson();
+            data = JSON.stringify(JSON.parse(data), null, 2);
+
+            var json = Android.getCachedSchedulesJson();
+            json = JSON.stringify(JSON.parse(json), null, 2);
+
+            var schedules = Android.getSchedulesText();
+
+            var info = Android.getDebugInfo();
+
+            window.onload=function() {
+                setValue('data', data);
+                setValue('info', info;
+                setValue('json', json);
+                setValue('schedules', schedules);
+            }
+
+        </script>
+        <h3>INFO</h3>
+        <pre id="info" name="info">
+
+        </pre>
+        <h3>Schedules</h3>
+        <pre id="schedules" name="schedules">
+
+        </pre>
+
+        <h3>Json</h3>
+        <pre id="json" name="json">
+
+        </pre>
+
+        <h3>Cached Json</h3>
+        <pre id = "data" name="data">
+        </pre>
+    </body>
+</html>

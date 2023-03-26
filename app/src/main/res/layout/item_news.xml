@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:gravity="center_vertical"
+    android:orientation="vertical"
+    android:paddingEnd="@dimen/dimen_2x"
+    android:paddingStart="@dimen/dimen_2x">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_vertical"
+        android:orientation="horizontal">
+
+        <com.stech.smartads.components.textview.TextViewRegular
+            android:id="@+id/lbl_position"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="01"
+            android:textColor="@color/textColorSecondary"
+            android:textSize="@dimen/text_size_normal" />
+
+        <ImageView
+            android:id="@+id/img"
+            android:layout_width="@dimen/xlarge_icon"
+            android:layout_height="@dimen/xlarge_icon"
+            android:layout_marginStart="@dimen/dimen_2x"
+            android:contentDescription="@string/app_name"
+            android:scaleType="centerCrop"
+            android:src="@mipmap/ic_launcher" />
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/xlarge_icon"
+            android:layout_marginStart="@dimen/dimen_2x"
+            android:orientation="vertical">
+
+            <com.stech.smartads.components.textview.TextViewRegular
+                android:id="@+id/lbl_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:marqueeRepeatLimit="marquee_forever"
+                android:maxLines="4"
+                android:text="Games of Throne"
+                android:textColor="@color/textColorSecondary"
+                android:textSize="@dimen/text_size_large" />
+
+            <com.stech.smartads.components.textview.TextViewRegular
+                android:id="@+id/lbl_desc"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ellipsize="end"
+                android:maxLines="4"
+                android:text="Games of Throne"
+                android:textColor="@color/textColorSecondary"
+                android:textSize="@dimen/text_size_normal"
+                android:visibility="gone" />
+        </LinearLayout>
+    </LinearLayout>
+
+    <View
+        android:id="@+id/divider"
+        android:layout_width="match_parent"
+        android:layout_height="@dimen/dimen_divider"
+        android:layout_marginBottom="@dimen/dimen_1x"
+        android:layout_marginTop="@dimen/dimen_1x"
+        android:background="@color/dividerColor" />
+</LinearLayout>

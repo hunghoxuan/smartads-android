@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <link rel="stylesheet" href="./assets/css/reset.css">
+    <link rel="stylesheet" href="./assets/css/style.css">
+</head>
+
+<body>
+    <div id="hero-slider">
+        <!--
+        <div id="logo" class="mask">
+            <span class="logo-text masked">Martin Rohde</span>
+        </div>
+        -->
+        <div id="slideshow">
+            <div id="slides-main" class="slides">
+
+            </div>
+            <div id="slides-aux" class="slides mask">
+
+            </div>
+        </div>
+        <!--
+        <div id="info">
+            <div class="slider-title-wrapper">
+                <span class="line"></span>
+                <h1 class="slider-title">
+                    <span>Projects</span>
+                </h1>
+            </div>
+            <div class="about">
+                <p>
+                    A pure CSS/JS slider layout<br/>
+                    Developed for Toptal engineering blog<br/>
+                    by <a href="http://stefan.lynxdev.io" target="_blank">Stefan V</a>,
+                    repo on <a href="https://github.com/vitass/pure-css-js-slider" target="_blank">Github</a>
+                </p>
+            </div>
+        </div>
+    -->
+        <nav id="slider-nav">
+            <span class="current">01</span>
+        </nav>
+    </div>
+    <script src="../../common/jquery.min.js"></script>
+    <script src="../../common/main.js"></script>
+    <script src="./assets/js/main.js"></script>
+
+    <script>
+            var data = getData();
+            if (isEmpty(data)) {
+                 data = [
+                    {'url': 'file:///android_asset/images/default_image_1.png', 'description': '', 'title': ''},
+                    {'url': 'file:///android_asset/images/default_image_2.jpg', 'description': '', 'title': ''},
+                ];
+            }
+
+            //generate data
+           var control = document.getElementById('slides-main');
+           var html = '';
+           var html1 = '';
+           for (let i = 0; i < data.length; i++) {
+                let content = `<div class="slide" data-index="{i}">
+                                    <div class="abs-mask">
+                                        <div class="slide-image" style="background-image: url({image})"></div>
+                                    </div>
+                                </div>`;
+                let content1 = `<h2 class="slide-title slide" data-index="{i}"><a href="{url}">{description}</a></h2>`;
+                content = content.replaceAll('{image}', data[i].url).replaceAll('{i}', i);
+                content1 = content1.replaceAll('{url}', data[i].description).replaceAll('{i}', i).replaceAll('{description}', data[i].title);
+                html += content;
+                html1 += content1;
+           }
+           //Android.showMessage(html);
+           document.getElementById('slides-main').innerHTML = html;
+           document.getElementById('slides-aux').innerHTML = html1;
+
+    </script>
+</body>
+
+</html>

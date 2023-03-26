@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    android:minWidth="@dimen/min_width_dialog"
+    android:orientation="vertical"
+    android:padding="@dimen/dimen_2x">
+
+    <com.stech.smartads.components.textview.TextViewRegular
+        android:id="@+id/lbl_msg"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:gravity="center_horizontal"
+        android:textColor="@color/textColorPrimary"
+        android:textSize="@dimen/text_size_large" />
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/dimen_4x"
+        android:orientation="horizontal">
+
+        <com.stech.smartads.components.textview.TextViewRegular
+            android:id="@+id/lbl_negative"
+            style="@style/Button.Grey"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/dimen_1x"
+            android:layout_marginRight="@dimen/dimen_1x"
+            android:layout_weight="1"
+            android:textColor="@color/lightColorPrimary"
+            android:textStyle="bold" />
+
+        <com.stech.smartads.components.textview.TextViewRegular
+            android:id="@+id/lbl_positive"
+            style="@style/Button.Primary"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/dimen_1x"
+            android:layout_marginStart="@dimen/dimen_1x"
+            android:layout_weight="1"
+            android:textStyle="bold" />
+    </LinearLayout>
+</LinearLayout>

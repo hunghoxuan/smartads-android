@@ -1,0 +1,27 @@
+<resources>
+    <string name="app_name">SmartAds</string>
+    <string name="msg_request_time_out">Request timeout</string>
+    <string name="pick_image_intent_text">Select image</string>
+    <string name="send_email">Send Email</string>
+    <string name="no_email_client">There are no email clients installed.</string>
+    <string name="no_email">This user has no email business_address</string>
+    <string name="no_phone_number">This user has no phone number</string>
+    <string name="msg_saved_successfully">Saved successfully</string>
+    <string name="msg_failed_to_save">Failed to save</string>
+    <string name="sharing">Sharing</string>
+    <string name="next">Next</string>
+    <string name="previous">Previous</string>
+    <string name="submit">Submit</string>
+    <string name="survey">Survey</string>
+    <string name="message_update_new_version">Do you want to install new app?</string>
+    <string name="yes">Yes</string>
+    <string name="no">No</string>
+
+    <!--his screen-->
+    <string name="ticket_no">Số Phiếu</string>
+    <string name="patient_name">Họ và Tên Bệnh Nhân</string>
+    <string name="status">Tình Trạng</string>
+    <string name="status_waiting">Đợi Khám</string>
+    <string name="status_calling">Đang Khám</string>
+    <string name="danh_sach_benh_nhan">Danh Sách Bệnh Nhân</string>
+</resources>
