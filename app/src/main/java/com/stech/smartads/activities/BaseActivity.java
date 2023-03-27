@@ -112,14 +112,15 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     }
 
     protected void initLogo() {
-        float opacity = AppData().isWebsiteMode() ? 1 : ((float) Setting().getLogoOpacity() / 100);
+        final boolean isWebsiteMode = AppData().isWebsiteMode();
+        final float opacity = isWebsiteMode ? 1 : ((float) Setting().getLogoOpacity() / 100); //always show back button if in website mode
         final String mode = AppData().getAppMode();
         String logoUrl = AppData().isWebsiteMode() ? AppConfigs.ASSET_ROOT_FOLDER + "/common/back.png" : Setting().getLogoUrl();
         imgTopLogo = addImage(CommonUtil.getLayoutParams(self, Setting().getLogoPosition(), AppConfigs.SHOW_LOGO_WIDTH, AppConfigs.SHOW_LOGO_HEIGHT), logoUrl, opacity, -1);
         imgTopLogo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (AppData().isWebsiteMode()) {
+                if (isWebsiteMode) {
                     timeOutAction(); //goback
                 } else {
                     CommonUtil.showConfirmationDialog(self, Constants.TEXT_SELECT_APP_MODE, mode.equalsIgnoreCase(Constants.APP_MODE_API) ? Constants.TEXT_MEDIA : Constants.TEXT_HOMEPAGE, Constants.TEXT_MENU, true, new IConfirmation() {
