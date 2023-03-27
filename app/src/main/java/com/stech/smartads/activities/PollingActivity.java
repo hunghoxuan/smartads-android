@@ -45,7 +45,6 @@ public class PollingActivity extends BaseActivity implements View.OnClickListene
     private int totalTime = 30;
     private int count = 0;
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

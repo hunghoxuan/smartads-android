@@ -8,7 +8,7 @@ public class AppConfigs {
     public final static String HOMEPAGE = "https://stech.vn";
     public final static String SOURCE_PACKAGE = "com.stech.smartads";
 
-    public final static String LICENSE_KEY = "";
+    public final static String LICENSE_KEY = "DEMO";
 
     public final static String DEFAULT_CONTENT_APP = "home";
 

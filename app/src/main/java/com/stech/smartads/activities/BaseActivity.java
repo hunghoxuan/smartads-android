@@ -112,7 +112,7 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
     }
 
     protected void initLogo() {
-        float opacity = (float) Setting().getLogoOpacity() / 100;
+        float opacity = AppData().isWebsiteMode() ? 1 : ((float) Setting().getLogoOpacity() / 100);
         final String mode = AppData().getAppMode();
         String logoUrl = AppData().isWebsiteMode() ? AppConfigs.ASSET_ROOT_FOLDER + "/common/back.png" : Setting().getLogoUrl();
         imgTopLogo = addImage(CommonUtil.getLayoutParams(self, Setting().getLogoPosition(), AppConfigs.SHOW_LOGO_WIDTH, AppConfigs.SHOW_LOGO_HEIGHT), logoUrl, opacity, -1);
