@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED" />
     <uses-permission android:name="com.android.alarm.permission.SET_ALARM"/>
+    <uses-permission android:name="android.permission.WAKE_LOCK"/>
 
     <uses-permission android:name="android.permission.BLUETOOTH"/>
     <uses-permission android:name="android.permission.CALL_PHONE"/>
@@ -95,7 +96,7 @@
         <receiver android:name=".receiver.AlarmReceiver"/>
 
         <!-- Register the Audio service -->
-        <service android:name=".utils.MusicService"/>
+        <service android:name=".components.audio.AudioService"/>
 
 <!--        <provider-->
 <!--            android:name="android.support.v4.content.FileProvider"-->

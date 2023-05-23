@@ -1,5 +1,6 @@
 package com.stech.smartads.models;
 
+import com.stech.smartads.components.audio.Audio;
 import com.stech.smartads.config.Constants;
 import com.stech.smartads.core.AppData;
 import com.stech.smartads.utils.DateTimeUtil;
@@ -9,6 +10,7 @@ import org.json.JSONObject;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.LinkedList;
 import java.util.List;
 
 /**
@@ -32,7 +34,8 @@ public class Schedule {
 
     private List<LayoutFrameObj> arrFrameLayout;
     private List<String> arrFileUrls;
-
+    private List<Audio> arrAudios;
+    private JSONArray jsonSongs;
 
     public Schedule(){
         super();
@@ -100,6 +103,15 @@ public class Schedule {
                 this.startTime = "";
             }
 
+            this.arrAudios = new LinkedList<Audio>();
+            if(!jsonObj.isNull("audio")){
+                this.jsonSongs = jsonObj.getJSONArray("audio");
+                for (int i = 0; i < this.dataJson.length(); i++) {
+                    this.arrAudios.add(new Audio((JSONObject) this.jsonSongs.get(i)));
+                }
+
+            }
+
             //Hung: if no data -> could be blank
             if (this.dataJson.length() == 0) {
                 this.arrFrameLayout = AppData.getInstance().getDefaultSchedule().getFrameLayouts();
@@ -158,6 +170,9 @@ public class Schedule {
         }
     }
 
+    public List<Audio> getAudios() {
+        return this.arrAudios;
+    }
     public boolean isAds() {
         return isAds;
     }
@@ -204,6 +219,34 @@ public class Schedule {
 
     public void setArrFrameLayout(List<LayoutFrameObj> arrFrameLayout) {
         this.arrFrameLayout = arrFrameLayout;
+    }
+
+    public void addFrameLayouts(LayoutFrameObj layout, int i) {
+        getFrameLayouts().add(i, layout);
+    }
+
+    public void addFrameLayouts(LayoutFrameObj layout) {
+        getFrameLayouts().add(layout);
+    }
+
+    public void addFrameLayouts(List<LayoutFrameObj> layouts, int i) {
+        getFrameLayouts().addAll(i, layouts);
+    }
+
+    public void addFrameLayouts(List<LayoutFrameObj> layouts) {
+        getFrameLayouts().addAll(layouts);
+    }
+
+    public void addFrameLayouts(Schedule schedule) {
+        if (schedule == null)
+            return;
+        addFrameLayouts(schedule.getFrameLayouts());
+    }
+
+    public void addFrameLayouts(Schedule schedule, int i) {
+        if (schedule == null)
+            return;
+        addFrameLayouts(schedule.getFrameLayouts(), i);
     }
 
     public String getName() {

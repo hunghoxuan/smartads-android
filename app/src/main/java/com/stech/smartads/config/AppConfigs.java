@@ -10,17 +10,30 @@ public class AppConfigs {
 
     public final static String LICENSE_KEY = "DEMO";
 
+    public static final boolean isDebug = true; // call Log.e or not
+
+    public static final boolean allowOverlapSchedules = true;
+
     public final static String DEFAULT_CONTENT_APP = "home";
 
     public final static int CHECK_LICENSE_TIMER = 60*60;
 
-    public final static double SHOW_LOGO_WIDTH = 200;
-    public final static double SHOW_LOGO_HEIGHT = 200;
+    public final static int SHOW_LOGO_WIDTH = 200;
+    public final static int SHOW_LOGO_HEIGHT = 200;
+
+    public final static int BACK_BUTTON_WIDTH = 100;
+
     public final static String SHOW_LOGO_POSITION = "top_left";
 
     public static final int SHOW_LOGO_OPACITY = 0; //0.0-1.0f
 
-    public final static int SCREEN_PADDING = 50;
+    public final static String SCREEN_FRAME_BORDER_COLOR = "#000000";
+
+    public final static int SCREEN_FRAME_BORDER = 10; //white border around frames
+
+    public final static int SCREEN_PADDING_TOP_BOTTOM = 60; //logo
+    public final static int SCREEN_PADDING_LEFT_END = 43; //logo
+
     public final static int SCREEN_MARGIN_LEFT = 0;
     public final static int SCREEN_MARGIN_RIGHT = 0;
     public final static int SCREEN_MARGIN_TOP = 0;
@@ -45,7 +58,6 @@ public class AppConfigs {
     public static final boolean AUTO_LOOP_VIDEO = true;
     public static final int DURATION_UNIT = 1; //1:second, 60: minute
 
-    public static final boolean isDebug = false; // call Log.e or not
     public static final int debugTraceLevel = 5;
 
     public static final boolean AUTO_RESTART_WITH_UNCAUGHT_ERROR = true;

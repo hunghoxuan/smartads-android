@@ -10,7 +10,6 @@ import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
-import android.webkit.WebView;
 import android.widget.FrameLayout;
 
 import com.bumptech.glide.Glide;
@@ -30,7 +29,7 @@ import com.stech.smartads.models.ServerSetting;
 import com.stech.smartads.utils.CacheManager;
 import com.stech.smartads.utils.CommonUtil;
 import com.stech.smartads.utils.LocalBroadCastUtil;
-import com.stech.smartads.utils.SoftInputAssist;
+import com.stech.smartads.components.SoftInputAssist;
 import com.stech.smartads.utils.StringUtil;
 
 import java.util.ArrayDeque;
@@ -116,7 +115,10 @@ public abstract class BaseActivity extends AppCompatActivity implements View.OnC
         final float opacity = isWebsiteMode ? 1 : ((float) Setting().getLogoOpacity() / 100); //always show back button if in website mode
         final String mode = AppData().getAppMode();
         String logoUrl = AppData().isWebsiteMode() ? AppConfigs.ASSET_ROOT_FOLDER + "/common/back.png" : Setting().getLogoUrl();
-        imgTopLogo = addImage(CommonUtil.getLayoutParams(self, Setting().getLogoPosition(), AppConfigs.SHOW_LOGO_WIDTH, AppConfigs.SHOW_LOGO_HEIGHT), logoUrl, opacity, -1);
+        int logoWidth = AppData().isWebsiteMode() ? AppConfigs.BACK_BUTTON_WIDTH : AppConfigs.SHOW_LOGO_WIDTH;
+        int logoHeight = AppData().isWebsiteMode() ? AppConfigs.BACK_BUTTON_WIDTH : AppConfigs.SHOW_LOGO_HEIGHT;
+
+        imgTopLogo = addImage(CommonUtil.getLayoutParams(self, Setting().getLogoPosition(), logoWidth, logoHeight), logoUrl, opacity, -1);
         imgTopLogo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {

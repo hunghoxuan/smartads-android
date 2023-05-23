@@ -1,4 +1,4 @@
-package com.stech.smartads.utils;
+package com.stech.smartads.components;
 
 import android.os.AsyncTask;
 

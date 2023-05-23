@@ -381,20 +381,29 @@ public class AppData  {
             scheduleEndTime1 = arrSchedules.get(i).getFinishTime();
 
             if (scheduleTime1 <= currentTime  && currentTime < scheduleEndTime1) {
-                schedule = arrSchedules.get(i);
                 currentSchedulePosition = i;
+                if (currentSchedule != null) {
+                    CommonUtil.error("Schedules", "Total Schedules: " + arrSchedules.size() + ". Current Schedule #" + currentSchedule.getId() + " :" + DateTimeUtil.convertTimeStampToDate(currentSchedule.getStartTime(), AppConfigs.FORMAT_SCHEDULE_TIME) + " - " + DateTimeUtil.convertTimeStampToDate(currentSchedule.getFinishTime(), AppConfigs.FORMAT_SCHEDULE_TIME));
+                }
 
-                if (currentSchedule != null)
-                    CommonUtil.error("Schedules", "Total Schedules: " + arrSchedules.size() + ". Current Schedule #"  + currentSchedule.getId() + " :" + DateTimeUtil.convertTimeStampToDate(currentSchedule.getStartTime(), AppConfigs.FORMAT_SCHEDULE_TIME  ) + " - " + DateTimeUtil.convertTimeStampToDate(currentSchedule.getFinishTime(), AppConfigs.FORMAT_SCHEDULE_TIME ));
-
-                break;
+                if (AppConfigs.allowOverlapSchedules) {
+                    if (schedule == null)
+                        schedule = arrSchedules.get(i);
+                    else
+                        schedule.addFrameLayouts(arrSchedules.get(i));
+                } else {
+                    schedule = arrSchedules.get(i);
+                    break;
+                }
             }
-
         }
 
         if (schedule != null)
             currentSchedule = schedule;
-
+        if (AppConfigs.allowOverlapSchedules && currentSchedule != null) {
+            Schedule defaultSchedule = this.getDefaultSchedule(); // test
+            currentSchedule.addFrameLayouts(defaultSchedule, 0); // also play default Schedule at background
+        }
         return currentSchedule;
     }
 

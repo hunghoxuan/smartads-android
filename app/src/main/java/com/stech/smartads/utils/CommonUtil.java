@@ -153,7 +153,7 @@ public class CommonUtil extends BaseUtil {
         if (ex == null)
             return;
         processThrowable(ex);
-        CommonUtil.message(activity, Constants.TEXT_ERROR + ": " + StringUtil.getErrorMessage(ex));
+        message(activity, Constants.TEXT_ERROR + ": " + StringUtil.getErrorMessage(ex));
     }
 
     public static void processThrowable(Throwable ex, Context context) {
@@ -161,7 +161,7 @@ public class CommonUtil extends BaseUtil {
             return;
 
         processThrowable(ex);
-        CommonUtil.message(context, Constants.TEXT_ERROR + ": " + StringUtil.getErrorMessage(ex));
+        message(context, Constants.TEXT_ERROR + ": " + StringUtil.getErrorMessage(ex));
     }
 
     public static void processThrowable(Throwable ex) {
@@ -170,10 +170,10 @@ public class CommonUtil extends BaseUtil {
 
         error(Constants.TEXT_ERROR + ": ", StringUtil.getErrorMessage(ex));
 
-        if (AppData.getInstance().getServerSetting().isDebug()) {
-            Mint.logException(new Exception(ex));
-            Mint.flush();
-        }
+//        if (AppData.getInstance().getServerSetting().isDebug()) {
+//            Mint.logException(new Exception(ex));
+//            Mint.flush();
+//        }
     }
 
     public static boolean isValidException(Throwable ex) {
@@ -563,16 +563,16 @@ public class CommonUtil extends BaseUtil {
     }
 
     public static FrameLayout.LayoutParams getLayoutParams(Activity context, String position, double w, double h) {
-        return getLayoutParams(context, position, w, h, AppConfigs.SCREEN_PADDING);
+        return getLayoutParams(context, position, w, h, AppConfigs.SCREEN_PADDING_TOP_BOTTOM, AppConfigs.SCREEN_PADDING_LEFT_END);
     }
 
-    public static FrameLayout.LayoutParams getLayoutParams(Activity context, String position, double w, double h, int margin) {
+    public static FrameLayout.LayoutParams getLayoutParams(Activity context, String position, double w, double h, int margin_top, int margin_left) {
         int screenHeight = CommonUtil.getScreenHeightAsPixel(context);
         int screenWidth = CommonUtil.getScreenWidthAsPixel(context);
-        return getLayoutParams(context, position,  w < 1 ? (int) w * screenWidth : (int) w, h < 1 ? (int) h * screenHeight : (int) h, margin);
+        return getLayoutParams(context, position,  w < 1 ? (int) w * screenWidth : (int) w, h < 1 ? (int) h * screenHeight : (int) h, margin_top, margin_left);
     }
 
-    public static FrameLayout.LayoutParams getLayoutParams(Activity context, String position, int w, int h, int margin) {
+    public static FrameLayout.LayoutParams getLayoutParams(Activity context, String position, int w, int h, int margin_top, int margin_left) {
         int screenHeight = CommonUtil.getScreenHeightAsPixel(context);
         int screenWidth = CommonUtil.getScreenWidthAsPixel(context);
         int x, y;
@@ -601,13 +601,13 @@ public class CommonUtil extends BaseUtil {
             arr = position.split(":");
 
         if (arr[0].equalsIgnoreCase("top") || arr[1].equalsIgnoreCase("top")) {
-            y = margin;
+            y = margin_top;
             //height = 0;
         } else if (arr[0].equalsIgnoreCase("bottom") || arr[1].equalsIgnoreCase("bottom")) {
             if (height > 0)
-                y = screenHeight - margin - height;
+                y = screenHeight - margin_top - height;
             else
-                y = screenHeight - margin - 100;
+                y = screenHeight - margin_top - 100;
         } else {
             y = (int) StringUtil.convertStringToDecimalNumber(arr[0]);
             //height = 0;
@@ -615,11 +615,11 @@ public class CommonUtil extends BaseUtil {
 
 
         if (arr[1].equalsIgnoreCase("left") || arr[0].equalsIgnoreCase("left")) {
-            x = margin;
+            x = margin_left;
             gravity = Gravity.LEFT;
             //width = 0;
         } else if (arr[1].equalsIgnoreCase("right") || arr[1].equalsIgnoreCase("right")) {
-            x = margin; //screenWidth - margin - width;
+            x = margin_left; //screenWidth - margin - width;
             gravity = Gravity.RIGHT;
         } else {
             x = (int) StringUtil.convertStringToDecimalNumber(arr[1]);
@@ -630,11 +630,11 @@ public class CommonUtil extends BaseUtil {
     }
 
     public static FrameLayout.LayoutParams getLayoutParams(Activity context, String description, int w, int h) {
-        return getLayoutParams(context, description, w, h, AppConfigs.SCREEN_PADDING);
+        return getLayoutParams(context, description, w, h, AppConfigs.SCREEN_PADDING_TOP_BOTTOM, AppConfigs.SCREEN_PADDING_LEFT_END);
     }
 
     public static FrameLayout.LayoutParams getLayoutParams(Activity context, String description) {
-        return getLayoutParams(context, description, 0, 0, AppConfigs.SCREEN_PADDING);
+        return getLayoutParams(context, description, 0, 0, AppConfigs.SCREEN_PADDING_TOP_BOTTOM, AppConfigs.SCREEN_PADDING_LEFT_END);
     }
 
     /**

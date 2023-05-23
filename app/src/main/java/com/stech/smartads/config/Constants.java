@@ -43,6 +43,10 @@ public class Constants {
     public static final String PARAM_APP_MODE = "app_mode";
     public static final String PARAM_WEBSITE_TIMER = "website_timer";
     public static final String PARAM_HOME_PAGE = "homepage";
+
+    public static final String PARAM_FRAME_BORDER = "frame_border";
+    public static final String PARAM_FRAME_BORDER_COLOR = "frame_border_color";
+
     public static final String PARAM_LOGO_URL = "logo_url";
     public static final String PARAM_LOGO_OPACITY = "logo_opacity";
     public static final String PARAM_LOGO_POSITION = "logo_position";

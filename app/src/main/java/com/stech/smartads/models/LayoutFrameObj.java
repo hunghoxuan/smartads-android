@@ -6,6 +6,7 @@ import android.os.Parcelable;
 import android.widget.FrameLayout;
 
 import com.stech.smartads.activities.BaseActivity;
+import com.stech.smartads.components.audio.Audio;
 import com.stech.smartads.core.MainApplication;
 import com.stech.smartads.fragments.BaseFragment;
 import com.stech.smartads.fragments.CycleListFragment;
@@ -16,10 +17,8 @@ import com.stech.smartads.config.Constants;
 import com.stech.smartads.core.AppData;
 import com.stech.smartads.utils.CommonUtil;
 import com.stech.smartads.utils.ParseUtility;
-import com.stech.smartads.utils.StringUtil;
 
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
@@ -207,12 +206,12 @@ public class LayoutFrameObj implements Parcelable {
         return data != null? data : new ArrayList<DataContentObj>();
     }
 
-    public List<Song> getAudios() {
-        List<Song> songs = new ArrayList<>();
+    public List<Audio> getAudios() {
+        List<Audio> audio = new ArrayList<>();
         for (DataContentObj content:listAudios) {
-            songs.add(new Song(content));
+            audio.add(new Audio(content));
         }
-        return songs;
+        return audio;
     }
 
     public boolean isAvailableSongs(){

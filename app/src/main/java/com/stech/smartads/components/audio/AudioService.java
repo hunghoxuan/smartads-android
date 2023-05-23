@@ -1,4 +1,4 @@
-package com.stech.smartads.utils;
+package com.stech.smartads.components.audio;
 
 import android.app.Notification;
 import android.app.PendingIntent;
@@ -11,24 +11,26 @@ import android.net.Uri;
 import android.os.Binder;
 import android.os.IBinder;
 import android.os.PowerManager;
-import android.util.Log;
 
 import com.stech.smartads.R;
 import com.stech.smartads.activities.MainActivity;
-import com.stech.smartads.models.Song;
+import com.stech.smartads.utils.CommonUtil;
 
+import java.io.IOException;
 import java.util.ArrayList;
+import java.util.LinkedList;
+import java.util.List;
 import java.util.Random;
 
 
-public class MusicService extends Service implements
+public class AudioService extends Service implements
         MediaPlayer.OnPreparedListener, MediaPlayer.OnErrorListener,
         MediaPlayer.OnCompletionListener {
 
     //media player
     private MediaPlayer player;
     //song list
-    private ArrayList<Song> songs;
+    private LinkedList<Audio> listAudios;
     //current position
     private int songPosn;
     //binder
@@ -52,6 +54,8 @@ public class MusicService extends Service implements
         player = new MediaPlayer();
         //initialize
         initMusicPlayer();
+
+        listAudios = new LinkedList<Audio>();
     }
 
     public void initMusicPlayer(){
@@ -66,20 +70,38 @@ public class MusicService extends Service implements
     }
 
     //pass song list
-    public void setList(ArrayList<Song> theSongs){
-        songs=theSongs;
+    public void setAudios(List<Audio> theAudios){
+        if (theAudios == null)
+            return;
+        listAudios = new LinkedList<Audio>();
+        listAudios.addAll(theAudios);
+    }
+
+    public void addAudios(List<Audio> theAudios) {
+        if (theAudios == null)
+            return;
+        listAudios.addAll(theAudios);
+    }
+
+    public void addAudios(String url) {
+        listAudios.add(new Audio(url));
+    }
+
+    public void playAudio(String url) {
+        addAudios(url);
+        playLast();
     }
 
     //check Song list is ready to play
     public boolean isReadyToPlay(){
-        return songs !=null && songs.size()>0;
+        return listAudios !=null && listAudios.size()>0;
     }
 
 
     //binder
     public class MusicBinder extends Binder {
-        public MusicService getService() {
-            return MusicService.this;
+        public AudioService getService() {
+            return AudioService.this;
         }
     }
 
@@ -98,31 +120,48 @@ public class MusicService extends Service implements
     }
 
     //play a song
-    public void playSong(){
+    public void playSong() {
+        if (!isReadyToPlay())
+            return;
+
         //play
         player.reset();
         //get song
-        Song playSong = songs.get(songPosn);
+        Audio playAudio = listAudios.get(songPosn);
+
         //get title
-        songTitle=playSong.getTitle();
-        //get id
-        int currSong = playSong.getId();
-        //set uri
-        Uri trackUri = ContentUris.withAppendedId(
-                android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
-                currSong);
+        songTitle= playAudio.getTitle();
+        String songUrl = playAudio.getUrl();
+
         //set the data source
-        try{
-            player.setDataSource(getApplicationContext(), trackUri);
+        try {
+            if (!songUrl.toLowerCase().startsWith("http")) {
+                Uri trackUri = ContentUris.withAppendedId(
+                        android.provider.MediaStore.Audio.Media.EXTERNAL_CONTENT_URI,
+                        getCurrentPosition());
+                player.setDataSource(getApplicationContext(), trackUri);
+                player.prepare();
+
+            } else {
+                player.setDataSource(playAudio.getUrl());
+                player.prepareAsync();
+            }
+
+        } catch (IllegalArgumentException e) {
+            CommonUtil.error(e);
+        } catch (SecurityException e) {
+            CommonUtil.error(e);
+        } catch (IllegalStateException e) {
+            CommonUtil.error(e);
+        } catch (IOException e) {
+            CommonUtil.error(e);
+        } catch(Exception e) {
+            CommonUtil.error(e);
         }
-        catch(Exception e){
-            Log.e("MUSIC SERVICE", "Error setting data source", e);
-        }
-        player.prepareAsync();
     }
 
     //set the song
-    public void setSong(int songIndex){
+    public void setAudio(int songIndex){
         songPosn=songIndex;
     }
 
@@ -137,7 +176,7 @@ public class MusicService extends Service implements
 
     @Override
     public boolean onError(MediaPlayer mp, int what, int extra) {
-        Log.v("MUSIC PLAYER", "Playback Error");
+        CommonUtil.error("MUSIC PLAYER", "Playback Error");
         mp.reset();
         return false;
     }
@@ -173,11 +212,11 @@ public class MusicService extends Service implements
     }
 
     //playback methods
-    public int getPosn(){
+    public int getCurrentPosition(){
         return player.getCurrentPosition();
     }
 
-    public int getDur(){
+    public int getDuration(){
         return player.getDuration();
     }
 
@@ -200,7 +239,7 @@ public class MusicService extends Service implements
     //skip to previous track
     public void playPrev(){
         songPosn--;
-        if(songPosn<0) songPosn=songs.size()-1;
+        if(songPosn<0) songPosn= listAudios.size()-1;
         playSong();
     }
 
@@ -209,14 +248,19 @@ public class MusicService extends Service implements
         if(shuffle){
             int newSong = songPosn;
             while(newSong==songPosn){
-                newSong=rand.nextInt(songs.size());
+                newSong=rand.nextInt(listAudios.size());
             }
             songPosn=newSong;
         }
         else{
             songPosn++;
-            if(songPosn>=songs.size()) songPosn=0;
+            if(songPosn>= listAudios.size()) songPosn=0;
         }
+        playSong();
+    }
+
+    public void playLast() {
+        songPosn = listAudios.size() - 1;
         playSong();
     }
 

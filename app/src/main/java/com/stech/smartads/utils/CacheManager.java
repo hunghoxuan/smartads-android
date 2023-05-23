@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.SharedPreferences;
 import android.os.Environment;
 
+import com.stech.smartads.components.DownloadService;
 import com.stech.smartads.config.AppConfigs;
 import com.stech.smartads.config.Constants;
 import com.stech.smartads.core.AppData;
@@ -131,8 +132,8 @@ public class CacheManager extends BaseUtil {
     }
 
     public static void downloadFile(Context context, String url, int requestTime){
-        if(!DownloadUtil.isDownloading && url != null && !url.isEmpty())
-            new DownloadUtil(context, getCacheFolder(),requestTime).execute(url);
+        if(!DownloadService.isDownloading && url != null && !url.isEmpty())
+            new DownloadService(context, getCacheFolder(),requestTime).execute(url);
     }
 
     public static void downloadListFile(Context context,List<String> urls){
@@ -141,11 +142,11 @@ public class CacheManager extends BaseUtil {
             if(!url.isEmpty()) {
                 String localUrl = CacheManager.getCacheFileUrl(context, url);
                 if (localUrl.isEmpty()) {
-                    new DownloadUtil(context, getCacheFolder(),1).execute(url);
+                    new DownloadService(context, getCacheFolder(),1).execute(url);
                 } else {
                     File file = new File(localUrl);
                     if (!file.exists()) {
-                        new DownloadUtil(context, getCacheFolder(),1).execute(url);
+                        new DownloadService(context, getCacheFolder(),1).execute(url);
                     } else {
                         CommonUtil.log("CacheManager", "Download success (file is existed): " + localUrl);
                     }
