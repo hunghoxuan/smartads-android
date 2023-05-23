@@ -12,7 +12,7 @@ public class AppConfigs {
 
     public static final boolean isDebug = true; // call Log.e or not
 
-    public static final boolean allowOverlapSchedules = true;
+    public static final boolean allowOverlapSchedules = false;
 
     public final static String DEFAULT_CONTENT_APP = "home";
 

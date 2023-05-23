@@ -83,7 +83,6 @@ public class DataContentObj implements Parcelable {
         this.displayType = DISPLAY_TYPE_TIME;
     }
 
-
     public DataContentObj(JSONObject jsonObj)
     {
         try {

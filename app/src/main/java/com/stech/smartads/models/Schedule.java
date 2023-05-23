@@ -3,6 +3,7 @@ package com.stech.smartads.models;
 import com.stech.smartads.components.audio.Audio;
 import com.stech.smartads.config.Constants;
 import com.stech.smartads.core.AppData;
+import com.stech.smartads.utils.CommonUtil;
 import com.stech.smartads.utils.DateTimeUtil;
 
 import org.json.JSONArray;
@@ -103,71 +104,38 @@ public class Schedule {
                 this.startTime = "";
             }
 
-            this.arrAudios = new LinkedList<Audio>();
-            if(!jsonObj.isNull("audio")){
-                this.jsonSongs = jsonObj.getJSONArray("audio");
-                for (int i = 0; i < this.dataJson.length(); i++) {
-                    this.arrAudios.add(new Audio((JSONObject) this.jsonSongs.get(i)));
-                }
-
-            }
-
             //Hung: if no data -> could be blank
             if (this.dataJson.length() == 0) {
                 this.arrFrameLayout = AppData.getInstance().getDefaultSchedule().getFrameLayouts();
             } else {
-                this.arrFrameLayout = new ArrayList<>();
+                this.arrFrameLayout = new LinkedList<>();
                 for (int i = 0; i < this.dataJson.length(); i++) {
                     this.arrFrameLayout.add(new LayoutFrameObj((JSONObject) this.dataJson.get(i)));
                 }
             }
 
+            this.arrAudios = new LinkedList<Audio>();
+            if(!jsonObj.isNull("audio")){
+                this.jsonSongs = jsonObj.getJSONArray("audio");
+                for (int i = 0; i < this.jsonSongs.length(); i++) {
+                    this.arrAudios.add(new Audio((JSONObject) this.jsonSongs.get(i)));
+                }
+            }
+
         } catch (Exception e) {
+            CommonUtil.error(e);
             this.id = 0;
             this.name = "";
             this.arrFrameLayout = new ArrayList<>();
+            this.arrAudios = new LinkedList<Audio>();
         }
     }
 
     public Schedule(JSONObject jsonObj, String date)
     {
-        try {
-            this.jsonObject = jsonObj;
-            this.json = jsonObj.isNull("data") ? "" : jsonObj.getString("data");
-            //parse json Array
-            this.dataJson = jsonObj.getJSONArray("data");
-
-            this.id = jsonObj.isNull("id") ? 0 : jsonObj.getInt("id");
-            this.name = jsonObj.isNull("name") ? "" : jsonObj.getString("name");
-            this.background = jsonObj.isNull("background") ? background:jsonObj.getString("background");
-            this.fontColor = jsonObj.isNull("fontColor") ? fontColor:jsonObj.getString("fontColor");
-            this.duration = jsonObj.isNull("duration") ? 0 : jsonObj.getInt("duration");
-
-            //process start time
-            if (!jsonObj.isNull("start_time")) {
-
-                String time = jsonObj.getString("start_time");
-                startTime = date + " "+time;
-
-            } else {
-                this.startTime = "";
-            }
-
-            //parse json Array
-            if (dataJson.length() == 0) {
-                this.arrFrameLayout = AppData.getInstance().getDefaultSchedule().getFrameLayouts();
-            } else {
-                this.arrFrameLayout = new ArrayList<>();
-                for (int i = 0; i < dataJson.length(); i++) {
-                    arrFrameLayout.add(new LayoutFrameObj((JSONObject) dataJson.get(i)));
-                }
-            }
-
-        } catch (Exception e) {
-            this.id = 0;
-            this.name = "";
-            this.arrFrameLayout = new ArrayList<>();
-        }
+        this(jsonObj);
+        if (!this.startTime.isEmpty())
+            this.startTime = date + " " + this.startTime;
     }
 
     public List<Audio> getAudios() {

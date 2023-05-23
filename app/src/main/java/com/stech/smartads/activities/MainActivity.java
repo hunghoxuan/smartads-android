@@ -227,7 +227,6 @@ public class MainActivity extends BaseActivity implements SocketListener {
             AppData.getInstance().setScreenHeight(decorView.getHeight());
             AppData.getInstance().setScreenWidth(decorView.getWidth());
 
-
             //CommonUtil.log(TAG, "original height: " + decorView.getHeight());
             decorView.setOnSystemUiVisibilityChangeListener(
                     new View.OnSystemUiVisibilityChangeListener() {

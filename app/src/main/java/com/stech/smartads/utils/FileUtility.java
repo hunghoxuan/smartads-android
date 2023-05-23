@@ -38,7 +38,7 @@ import com.stech.smartads.models.DataContentObj;
 
 public final class FileUtility extends BaseUtil {
 
-	public Bitmap getBitmapFromAssets(Context context, String fileName)
+	public static Bitmap getBitmapFromAssets(Context context, String fileName)
 			throws IOException {
 		AssetManager assetManager = context.getAssets();
 		InputStream istr = assetManager.open(fileName);

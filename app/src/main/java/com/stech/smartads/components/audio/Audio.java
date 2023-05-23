@@ -1,8 +1,6 @@
 package com.stech.smartads.components.audio;
 
-
 import com.stech.smartads.models.DataContentObj;
-
 import org.json.JSONObject;
 
 public class Audio {
@@ -59,9 +57,8 @@ public class Audio {
     }
 
     public String getUrl() {
-        return description;
         // return "https://www.soundhelix.com/examples/mp3/SoundHelix-Song-1.mp3";
-        // return url;
+        return url;
     }
 
     public void setUrl(String url) {

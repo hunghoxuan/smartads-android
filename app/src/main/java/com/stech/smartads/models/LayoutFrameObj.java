@@ -22,6 +22,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 
@@ -40,7 +41,7 @@ public class LayoutFrameObj implements Parcelable {
 
     private String dataContentType = "html";
     private List<DataContentObj> data;
-    private List<DataContentObj> listAudios;
+    private List<Audio> listAudios;
 
     //extra
     private String background = "#3F51B5";
@@ -53,7 +54,7 @@ public class LayoutFrameObj implements Parcelable {
 
     public LayoutFrameObj() {
         super();
-        this.data = new ArrayList<DataContentObj>();
+        this.data = new LinkedList<DataContentObj>();
     }
 
     public LayoutFrameObj(LayoutFrameObj obj) {
@@ -70,13 +71,13 @@ public class LayoutFrameObj implements Parcelable {
 
     public LayoutFrameObj(String text) {
         super();
-        this.data = new ArrayList<DataContentObj>();
+        this.data = new LinkedList<DataContentObj>();
         addContent(text, CommonUtil.getUrlType(text));
     }
 
     public LayoutFrameObj(String text, String type) {
         super();
-        this.data = new ArrayList<DataContentObj>();
+        this.data = new LinkedList<DataContentObj>();
         addContent(text, type);
     }
 
@@ -114,20 +115,19 @@ public class LayoutFrameObj implements Parcelable {
 
             //parse json Array
             JSONArray dataJson = jsonObj.getJSONArray("data");
-            this.data = new ArrayList<>();
+            this.data = new LinkedList<>();
             for (int i = 0; i < dataJson.length();i++) {
                 data.add(new DataContentObj((JSONObject) dataJson.get(i)));
             }
 
             //parse json audio
-            listAudios = new ArrayList<>();
+            listAudios = new LinkedList<>();
             if(!jsonObj.isNull("audio")) {
                 JSONArray audioJson = jsonObj.getJSONArray("audio");
                 for (int i = 0; i < audioJson.length(); i++) {
-                    data.add(new DataContentObj((JSONObject) audioJson.get(i)));
+                    listAudios.add(new Audio((JSONObject) audioJson.get(i)));
                 }
             }
-
 
         } catch (Exception e) {
             this.id = 0;
@@ -137,8 +137,8 @@ public class LayoutFrameObj implements Parcelable {
             this.positionMarginLeft = 0;
             this.positionMarginTop = 0;
             this.dataContentType = "text";
-            this.data = new ArrayList<>();
-            this.listAudios = new ArrayList<>();
+            this.data = new LinkedList<>();
+            this.listAudios = new LinkedList<>();
         }
     }
 
@@ -151,7 +151,7 @@ public class LayoutFrameObj implements Parcelable {
         positionMarginTop = in.readDouble();
         dataContentType = in.readString();
         data = in.createTypedArrayList(DataContentObj.CREATOR);
-        listAudios = in.createTypedArrayList(DataContentObj.CREATOR);
+        listAudios = new LinkedList<Audio>(); // in.createTypedArrayList(Audio.CREATOR);
         background = in.readString();
         fontColor = in.readString();
     }
@@ -207,11 +207,7 @@ public class LayoutFrameObj implements Parcelable {
     }
 
     public List<Audio> getAudios() {
-        List<Audio> audio = new ArrayList<>();
-        for (DataContentObj content:listAudios) {
-            audio.add(new Audio(content));
-        }
-        return audio;
+        return this.listAudios;
     }
 
     public boolean isAvailableSongs(){
@@ -362,7 +358,7 @@ public class LayoutFrameObj implements Parcelable {
         dest.writeDouble(positionMarginTop);
         dest.writeString(dataContentType);
         dest.writeTypedList(data);
-        dest.writeTypedList(listAudios);
+        // dest.writeTypedList(listAudios);
         dest.writeString(background);
         dest.writeString(fontColor);
     }
