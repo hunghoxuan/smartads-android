@@ -1,4 +1,4 @@
-package com.stech.smartads.utils;
+package com.stech.smartads.components;
 
 import android.content.Context;
 import android.os.AsyncTask;
@@ -7,6 +7,10 @@ import android.os.Bundle;
 import com.stech.smartads.core.MainApplication;
 import com.stech.smartads.config.Constants;
 import com.stech.smartads.core.AppData;
+import com.stech.smartads.utils.CacheManager;
+import com.stech.smartads.utils.CommonUtil;
+import com.stech.smartads.utils.DateTimeUtil;
+import com.stech.smartads.utils.LocalBroadCastUtil;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -17,7 +21,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 
 
-public class DownloadUtil extends AsyncTask<String,String,Boolean> {
+public class DownloadService extends AsyncTask<String,String,Boolean> {
 
     public static final String STATUS_FILE_EXISTED = "STATUS_FILE_EXISTED";
     public static final String STATUS_DOWNLOAD_COMPLETED = "STATUS_DOWNLOAD_COMPLETED";
@@ -35,7 +39,7 @@ public class DownloadUtil extends AsyncTask<String,String,Boolean> {
     public static boolean isDownloading = false;
 
 
-    public DownloadUtil(Context context, String folderCache, int requestTime){
+    public DownloadService(Context context, String folderCache, int requestTime){
         this.context = context;
         this.folderCache = folderCache;
         this.requestTime = requestTime;
@@ -63,13 +67,11 @@ public class DownloadUtil extends AsyncTask<String,String,Boolean> {
         int count;
 
         try {
-
             //this time for calculate download time
-            startTime = DateTimeUtil.getCurrentTime(((MainApplication)context.getApplicationContext()).getCurrentCalendar(),DateTimeUtil.SECOND);
+            startTime = DateTimeUtil.getCurrentTime(((MainApplication) context.getApplicationContext()).getCurrentCalendar(),DateTimeUtil.SECOND);
 
             BufferedInputStream inputStream = null;
             BufferedOutputStream outputStream = null;
-
 
             URL urlFile = new URL(urlFrom);
             HttpURLConnection connection = (HttpURLConnection) urlFile.openConnection();
@@ -97,9 +99,8 @@ public class DownloadUtil extends AsyncTask<String,String,Boolean> {
                 connection.setRequestProperty("Range", "bytes=" + downloadedFileLength + "-");
                 outputStream = new BufferedOutputStream(new FileOutputStream(file, true));
 
-            }else{
+            } else{
                 outputStream = new BufferedOutputStream(new FileOutputStream(file));
-
             }
 
             connection.connect();
@@ -152,7 +153,7 @@ public class DownloadUtil extends AsyncTask<String,String,Boolean> {
             //send notification to app
             Bundle bundle = new Bundle();
             bundle.putString(Constants.PARAM_FILEURL, urlFrom);
-            bundle.putString(Constants.PARAM_STATUS, DownloadUtil.STATUS_DOWNLOAD_COMPLETED);
+            bundle.putString(Constants.PARAM_STATUS, DownloadService.STATUS_DOWNLOAD_COMPLETED);
             LocalBroadCastUtil.sendBroadcastListener(context,LocalBroadCastUtil.ACTION_DOWNLOAD_FILE_COMPLETED,bundle);
 
             //send to server

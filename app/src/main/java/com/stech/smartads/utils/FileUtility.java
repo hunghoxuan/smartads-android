@@ -15,38 +15,30 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.SortedSet;
-import java.util.TreeSet;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
-import android.Manifest;
 import android.app.Activity;
 import android.content.Context;
-import android.content.pm.PackageManager;
 import android.content.res.AssetManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Environment;
 import android.os.StatFs;
 import android.provider.MediaStore;
-import android.support.v4.app.ActivityCompat;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Base64;
 
-import com.android.volley.Cache;
+import com.stech.smartads.components.DownloadService;
 import com.stech.smartads.config.AppConfigs;
 import com.stech.smartads.config.Constants;
-import com.stech.smartads.core.AppData;
 import com.stech.smartads.core.MainApplication;
 import com.stech.smartads.models.DataContentObj;
 
-public final class FileUtility extends Activity {
+public final class FileUtility extends BaseUtil {
 
-	public Bitmap getBitmapFromAssets(Context context, String fileName)
+	public static Bitmap getBitmapFromAssets(Context context, String fileName)
 			throws IOException {
 		AssetManager assetManager = context.getAssets();
 		InputStream istr = assetManager.open(fileName);
@@ -345,8 +337,8 @@ public final class FileUtility extends Activity {
 
 
 	public static void downloadFile(Context context, String url, String downloadFolder, int requestTime){
-		if(!DownloadUtil.isDownloading && url != null && !url.isEmpty())
-			new DownloadUtil(context, downloadFolder,requestTime).execute(url);
+		if(!DownloadService.isDownloading && url != null && !url.isEmpty())
+			new DownloadService(context, downloadFolder,requestTime).execute(url);
 	}
 
 	public static void downloadListFile(Context context,List<String> urls, String downloadFolder) {
@@ -355,11 +347,11 @@ public final class FileUtility extends Activity {
 			if(!url.isEmpty()) {
 				String localUrl = CacheManager.getCacheFileUrl(context, url);
 				if (localUrl.isEmpty()) {
-					new DownloadUtil(context, downloadFolder,1).execute(url);
+					new DownloadService(context, downloadFolder,1).execute(url);
 				} else {
 					File file = new File(localUrl);
 					if (!file.exists()) {
-						new DownloadUtil(context, downloadFolder,1).execute(url);
+						new DownloadService(context, downloadFolder,1).execute(url);
 					} else {
 						CommonUtil.log("CacheManager", "Download success (file is existed): " + localUrl);
 					}

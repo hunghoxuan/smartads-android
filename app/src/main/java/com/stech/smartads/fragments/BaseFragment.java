@@ -1,10 +1,8 @@
 package com.stech.smartads.fragments;
 
-import android.app.AlertDialog;
 import android.app.Application;
 import android.content.ActivityNotFoundException;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.net.Uri;
@@ -16,15 +14,11 @@ import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Base64;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
 import android.webkit.JsResult;
 import android.webkit.WebChromeClient;
 import android.webkit.WebResourceError;
@@ -35,10 +29,8 @@ import android.webkit.WebStorage;
 import android.webkit.WebView;
 
 import android.webkit.WebViewClient;
-import android.widget.EditText;
 import android.widget.ImageView;
 
-import com.android.volley.Cache;
 import com.bumptech.glide.Glide;
 import com.github.barteksc.pdfviewer.PDFView;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
@@ -59,9 +51,8 @@ import com.stech.smartads.utils.CommonUtil;
 import com.stech.smartads.utils.DateTimeUtil;
 import com.stech.smartads.utils.FileUtility;
 import com.stech.smartads.utils.StringUtil;
-import com.stech.smartads.utils.PDFViewer;
+import com.stech.smartads.components.PDFViewer;
 import java.io.File;
-import java.io.InputStream;
 import java.util.List;
 import android.widget.RelativeLayout;
 import android.widget.TextView;

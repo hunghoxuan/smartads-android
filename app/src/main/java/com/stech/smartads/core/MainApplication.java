@@ -11,16 +11,19 @@ import com.stech.smartads.config.AppConfigs;
 import com.stech.smartads.components.network.NetworkUtility;
 import com.stech.smartads.config.Constants;
 import com.stech.smartads.models.ServerSetting;
+import com.stech.smartads.components.audio.Audio;
 import com.stech.smartads.utils.CommonUtil;
 import com.stech.smartads.utils.LocalBroadCastUtil;
-import com.stech.smartads.utils.MusicService;
+import com.stech.smartads.components.audio.AudioService;
 
+import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.List;
 
 
 public class MainApplication extends Application {
     private Activity mainActivity = null;
-    private MusicService musicService = null;
+    private AudioService audioService = null;
     private static Gson gson;
     private Calendar currentCalendar;
     private Handler handler;
@@ -171,16 +174,16 @@ public class MainApplication extends Application {
     }
 
     //manage audio service
-    public void setMusicService(MusicService service )
+    public void setMusicService(AudioService service )
     {
-        this.musicService = service;
+        this.audioService = service;
     }
-    public MusicService getMusicService()
+    public AudioService getMusicService()
     {
-        return musicService;
+        return audioService;
     }
     public boolean isMusicServiceAvailable(){
-        return musicService !=null;
+        return audioService !=null;
     }
 
     public Calendar getCurrentCalendar() {
@@ -222,5 +225,16 @@ public class MainApplication extends Application {
 
     public void setVideoPlaying(boolean videoPlaying) {
         isVideoPlaying = videoPlaying;
+    }
+
+    public void startAudioService(List<Audio> audio) {
+        try {
+            if (audioService != null) {
+                audioService.setAudios(audio);
+                audioService.playSong();
+            }
+        } catch (Exception ex) {
+            CommonUtil.error(getApplicationContext(), ex);
+        }
     }
 }

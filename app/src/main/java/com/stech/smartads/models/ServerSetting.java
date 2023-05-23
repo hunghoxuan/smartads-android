@@ -51,6 +51,10 @@ public class ServerSetting {
     private int refreshAppTime = AppConfigs.API_REFRESH_APP_TIMER_MAX;  //720 mins
     private int mainTimer = AppConfigs.MAIN_TIMER;
 
+    private int frameBorder = AppConfigs.SCREEN_FRAME_BORDER;
+    private String frameBorderColor = AppConfigs.SCREEN_FRAME_BORDER_COLOR;
+
+
     private int logoOpacity = AppConfigs.SHOW_LOGO_OPACITY; // 0%
     private String logoUrl = ""; // 0%
     private String logoPosition = AppConfigs.SHOW_LOGO_POSITION;
@@ -92,6 +96,9 @@ public class ServerSetting {
             this.textStatusTitle = jsonObj.isNull("textStatusTitle") ? textStatusTitle : jsonObj.getString("textStatusTitle");
 
             this.MintAPIKey = jsonObj.isNull("MintAPIKey") ? MintAPIKey : jsonObj.getString("MintAPIKey");
+
+            this.frameBorder = jsonObj.isNull(Constants.PARAM_FRAME_BORDER) ? frameBorder : jsonObj.getInt(Constants.PARAM_FRAME_BORDER);
+            this.frameBorderColor = jsonObj.isNull(Constants.PARAM_FRAME_BORDER_COLOR) ? frameBorderColor : jsonObj.getString(Constants.PARAM_FRAME_BORDER_COLOR);
 
             //logo
             this.logoUrl = jsonObj.isNull(Constants.PARAM_LOGO_URL) ? logoUrl : jsonObj.getString(Constants.PARAM_LOGO_URL);
@@ -161,6 +168,13 @@ public class ServerSetting {
 
     public boolean isDebug() {
         return isDebug;
+    }
+
+    public String getFrameBorderColor() {
+        return frameBorderColor;
+    }
+    public int getFrameBorder() {
+        return frameBorder;
     }
 
     public boolean getUseWebViewToShowImage() {

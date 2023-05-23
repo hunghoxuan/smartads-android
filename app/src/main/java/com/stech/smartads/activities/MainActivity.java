@@ -10,42 +10,27 @@ import android.content.IntentFilter;
 import android.content.ServiceConnection;
 import android.content.res.Configuration;
 import android.graphics.Color;
-import android.graphics.Rect;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.IBinder;
-import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v4.view.OnApplyWindowInsetsListener;
-import android.support.v4.view.ViewCompat;
-import android.support.v4.view.WindowInsetsCompat;
-import android.view.Gravity;
 import android.view.View;
-import android.view.ViewTreeObserver;
 import android.view.WindowManager;
 import android.widget.FrameLayout;
-import android.widget.ImageView;
-import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.github.nkzawa.emitter.Emitter;
 import com.github.nkzawa.socketio.client.IO;
 import com.github.nkzawa.socketio.client.Socket;
-import com.stech.smartads.R;
 import com.stech.smartads.core.MainApplication;
 import com.stech.smartads.core.AppData;
-import com.stech.smartads.interfaces.IConfirmation;
 import com.stech.smartads.interfaces.IModelListener;
 import com.stech.smartads.models.DataContentObj;
-import com.stech.smartads.utils.KeyboardUtil;
 import com.stech.smartads.utils.PacketUtility;
 import com.stech.smartads.config.AppConfigs;
-import com.stech.smartads.fragments.BaseFragment;
 import com.stech.smartads.config.Constants;
 import com.stech.smartads.components.network.NetworkUtility;
-import com.stech.smartads.models.AppVersionObj;
 import com.stech.smartads.models.Schedule;
-import com.stech.smartads.models.Song;
+import com.stech.smartads.components.audio.Audio;
 import com.stech.smartads.utils.CacheManager;
 import com.stech.smartads.config.SocketConfigs;
 import com.stech.smartads.utils.ParseUtility;
@@ -53,10 +38,10 @@ import com.stech.smartads.models.LayoutFrameObj;
 import com.stech.smartads.components.socket.SocketListener;
 import com.stech.smartads.utils.CommonUtil;
 import com.stech.smartads.utils.DateTimeUtil;
-import com.stech.smartads.utils.DownloadUtil;
+import com.stech.smartads.components.DownloadService;
 import com.stech.smartads.utils.LocalBroadCastUtil;
-import com.stech.smartads.utils.MusicService;
-import com.stech.smartads.utils.SoftInputAssist;
+import com.stech.smartads.components.audio.AudioService;
+import com.stech.smartads.components.SoftInputAssist;
 import com.stech.smartads.utils.StringUtil;
 
 import org.json.JSONException;
@@ -85,7 +70,6 @@ public class MainActivity extends BaseActivity implements SocketListener {
     List<LayoutFrameObj> layouts;
 
     protected SoftInputAssist createSoftInputAssist() {
-
         return null; //return new SoftInputAssist(this);
     }
 
@@ -93,7 +77,7 @@ public class MainActivity extends BaseActivity implements SocketListener {
     private ServiceConnection musicConnection = new ServiceConnection() {
         @Override
         public void onServiceConnected(ComponentName name, IBinder service) {
-            MusicService.MusicBinder binder = (MusicService.MusicBinder) service;
+            AudioService.MusicBinder binder = (AudioService.MusicBinder) service;
             //get service
             ((MainApplication) getApplication()).setMusicService(binder.getService());
         }
@@ -180,10 +164,10 @@ public class MainActivity extends BaseActivity implements SocketListener {
 
                         if (status == null) return;
 
-                        if (status.equals(DownloadUtil.STATUS_ERROR_SERVER)) { // if download get error (server die or stop)
+                        if (status.equals(DownloadService.STATUS_ERROR_SERVER)) { // if download get error (server die or stop)
                             //CommonUtil.log(TAG, "-- Download File fail - server no response !");
                             return;
-                        } else if (status.equals(DownloadUtil.STATUS_FILE_EXISTED)) {
+                        } else if (status.equals(DownloadService.STATUS_FILE_EXISTED)) {
                             //CommonUtil.log(TAG, "-- Download File Broadcast File is existed");
                         }
 
@@ -242,7 +226,6 @@ public class MainActivity extends BaseActivity implements SocketListener {
             getDecorView().setSystemUiVisibility(uiOptions);
             AppData.getInstance().setScreenHeight(decorView.getHeight());
             AppData.getInstance().setScreenWidth(decorView.getWidth());
-
 
             //CommonUtil.log(TAG, "original height: " + decorView.getHeight());
             decorView.setOnSystemUiVisibilityChangeListener(
@@ -315,7 +298,6 @@ public class MainActivity extends BaseActivity implements SocketListener {
 
     @Override
     protected void inflateLayout() {
-
         // getLayoutInflater().inflate(R.layout.activity_main, mFrlMain);
     }
 
@@ -509,9 +491,7 @@ public class MainActivity extends BaseActivity implements SocketListener {
                     //showMessage( "Tải kịch bản !! " + json);
                     if (!json.isEmpty()) {
                         Schedule currentSchedule = AppData.getInstance().getCurrentSchedule();
-
                         createLayout(true, DateTimeUtil.getScheduleTimeDisplay(currentSchedule));
-
                         handleDownloadFile();
                     }
 
@@ -551,7 +531,80 @@ public class MainActivity extends BaseActivity implements SocketListener {
         if (!message.isEmpty())
             showMessage( message.isEmpty() ? Constants.TEXT_INIT_SCREEN : (Constants.TEXT_UPDATE_SCREEN +  ": " + message));
 
+        startAudioService(schedule.getAudios());
         setNextTimeRefresh();
+    }
+
+    public void createScheduleLayout(Schedule schedule) {
+        FrameLayout frame = null;
+        FrameLayout.LayoutParams params = null;
+
+        layouts = getLayouts();
+
+        if (schedule == null) {
+            //showMessage( "Không tìm được kịch bản để hiển thị"); // Full screen
+            layouts.clear();
+            LayoutFrameObj layout = new LayoutFrameObj(AppConfigs.HOMEPAGE);
+            layouts.add(layout);
+        } else {
+            layouts = schedule.getFrameLayouts();
+            getFrameLayout().setBackgroundColor(Color.parseColor(schedule.getBackground()));
+            AppData().setCurrentSchedule(schedule); //assign current schedule !!
+        }
+
+        //add new layout
+        for (LayoutFrameObj layout : layouts) {
+            addFragment(layout);
+        }
+
+        // addFragment(0.1, 0.1, 300, 200, "https://freehtml5games.org/icons/duck-shooter.png", Constants.TYPE_IMAGE);
+        // addFragment("main", "https://freehtml5games.org/icons/duck-shooter.png", Constants.TYPE_IMAGE);
+    }
+
+    public void addFragment(LayoutFrameObj layout) {
+        layout.setActivity(self);
+
+        FrameLayout frame = null;
+        FrameLayout.LayoutParams params = null;
+        frame = new FrameLayout(self);
+        frame.setTag(layout.getName());
+        frame.setId(layout.getId());
+
+        //set background
+        frame.setBackgroundColor(Color.parseColor(layout.getBackground()));
+        //set fragment content
+        addFragment(frame, layout.getFragmentContent());
+
+        params = new FrameLayout.LayoutParams(layout.getWidth(self), layout.getHeight(self));//width and height
+        params.leftMargin = layout.getLeft(self);
+        params.topMargin = layout.getTop(self);
+
+        int screenHeight = (int) (AppData().getScreenHeight() * 0.99);
+        int screenWidth = (int) (AppData().getScreenWidth() * 0.99);
+        int frameBorder = AppData().getServerSetting().getFrameBorder();
+        String frameBorderColor = AppData().getServerSetting().getFrameBorderColor();
+        // frame.setBackgroundColor(Color.parseColor(frameBorderColor));
+
+        if (params.leftMargin + params.width < screenWidth) {
+            params.width -= frameBorder;
+            //showMessage(String.valueOf(params.leftMargin) + " : " + String.valueOf(params.leftMargin + params.width) + ":" + String.valueOf(screenWidth));
+        }
+
+        if (params.topMargin + params.height < screenHeight) {
+            params.height -= frameBorder;
+            //showMessage(String.valueOf(params.topMargin) + " : " + String.valueOf(params.topMargin + params.height) + ":" + String.valueOf(screenHeight));
+        }
+
+//        if (params.leftMargin > 0) {
+//            params.leftMargin += frameBorder;
+//        }
+
+//        if (params.topMargin > 0) {
+//            params.topMargin += frameBorder;
+//        }
+
+        getFrameLayout().addView(frame, params);
+        layout.setFrame(frame);
     }
 
     void createLayout(String message) {
@@ -615,53 +668,8 @@ public class MainActivity extends BaseActivity implements SocketListener {
         return layouts;
     }
 
-    public void createScheduleLayout(Schedule schedule) {
-        FrameLayout frame = null;
-        FrameLayout.LayoutParams params = null;
 
-        layouts = getLayouts();
 
-        if (schedule == null) {
-            //showMessage( "Không tìm được kịch bản để hiển thị"); // Full screen
-            layouts.clear();
-            LayoutFrameObj layout = new LayoutFrameObj(AppConfigs.HOMEPAGE);
-            layouts.add(layout);
-        } else {
-            layouts = schedule.getFrameLayouts();
-            getFrameLayout().setBackgroundColor(Color.parseColor(schedule.getBackground()));
-            AppData().setCurrentSchedule(schedule); //assign current schedule !!
-        }
-
-        //add new layout
-        for (LayoutFrameObj layout : layouts) {
-            addFragment(layout);
-        }
-
-        //addFragment(0.1, 0.1, 300, 200, "https://freehtml5games.org/icons/duck-shooter.png", Constants.TYPE_IMAGE);
-        //addFragment("main", "https://freehtml5games.org/icons/duck-shooter.png", Constants.TYPE_IMAGE);
-    }
-
-    public void addFragment(LayoutFrameObj layout) {
-        layout.setActivity(self);
-
-        FrameLayout frame = null;
-        FrameLayout.LayoutParams params = null;
-        frame = new FrameLayout(self);
-        frame.setTag(layout.getName());
-        frame.setId(layout.getId());
-
-        //set background
-        frame.setBackgroundColor(Color.parseColor(layout.getBackground()));
-        //set fragment content
-        addFragment(frame, layout.getFragmentContent());
-
-        params = new FrameLayout.LayoutParams(layout.getWidth(self), layout.getHeight(self));//width and height
-        params.leftMargin = layout.getLeft(self);
-        params.topMargin = layout.getTop(self);
-
-        getFrameLayout().addView(frame, params);
-        layout.setFrame(frame);
-    }
 
     public LayoutFrameObj getLayoutByName(String frameName) {
         for (LayoutFrameObj layout : layouts) {
@@ -785,7 +793,6 @@ public class MainActivity extends BaseActivity implements SocketListener {
     //set alarm in next time
     private void setNextTimeRefresh() {
         try {
-
             long scheduleTime = 0;
             long scheduleTimeFinished = 0;
             boolean needRefresh = false;
@@ -1103,7 +1110,7 @@ public class MainActivity extends BaseActivity implements SocketListener {
             }
 
             //if downloading is processing -> cancel new request download
-            if (DownloadUtil.isDownloading) return;
+            if (DownloadService.isDownloading) return;
 
             long currentTime = DateTimeUtil.getCurrentTime(((MainApplication) getApplication()).getCurrentCalendar(), DateTimeUtil.MILLISECOND);
             if (currentTime < AppData.getInstance().getDownloadResourceTime()) {
@@ -1131,7 +1138,7 @@ public class MainActivity extends BaseActivity implements SocketListener {
         try {
             final Context context = AppData().getContext();
 
-            if (DownloadUtil.isDownloading) return;
+            if (DownloadService.isDownloading) return;
 
             //check file is able to download or not
             boolean isAbleDownloadFile = CacheManager.isAbleDownloadFile(context, fileUrl);
@@ -1140,7 +1147,7 @@ public class MainActivity extends BaseActivity implements SocketListener {
                 //send notification to app
                 Bundle bundle = new Bundle();
                 bundle.putString(Constants.PARAM_FILEURL, fileUrl);
-                bundle.putString(Constants.PARAM_STATUS, DownloadUtil.STATUS_FILE_EXISTED);
+                bundle.putString(Constants.PARAM_STATUS, DownloadService.STATUS_FILE_EXISTED);
                 LocalBroadCastUtil.sendBroadcastListener(context, LocalBroadCastUtil.ACTION_DOWNLOAD_FILE_COMPLETED, bundle);
 
             } else {
@@ -1185,7 +1192,7 @@ public class MainActivity extends BaseActivity implements SocketListener {
                                 //send notification to app
                                 Bundle bundle = new Bundle();
                                 bundle.putString(Constants.PARAM_FILEURL, fileUrl);
-                                bundle.putString(Constants.PARAM_STATUS, DownloadUtil.STATUS_ERROR_SERVER);
+                                bundle.putString(Constants.PARAM_STATUS, DownloadService.STATUS_ERROR_SERVER);
                                 LocalBroadCastUtil.sendBroadcastListener(context, LocalBroadCastUtil.ACTION_DOWNLOAD_FILE_COMPLETED, bundle);
                             }
                         } catch (JSONException e) {
@@ -1194,7 +1201,7 @@ public class MainActivity extends BaseActivity implements SocketListener {
                             //error -> process to next file
                             Bundle bundle = new Bundle();
                             bundle.putString(Constants.PARAM_FILEURL, fileUrl);
-                            bundle.putString(Constants.PARAM_STATUS, DownloadUtil.STATUS_ERROR_SERVER);
+                            bundle.putString(Constants.PARAM_STATUS, DownloadService.STATUS_ERROR_SERVER);
                             LocalBroadCastUtil.sendBroadcastListener(context, LocalBroadCastUtil.ACTION_DOWNLOAD_FILE_COMPLETED, bundle);
 
                         }
@@ -1206,7 +1213,7 @@ public class MainActivity extends BaseActivity implements SocketListener {
                         //error connect to server -> stop download queue
                         Bundle bundle = new Bundle();
                         bundle.putString(Constants.PARAM_FILEURL, fileUrl);
-                        bundle.putString(Constants.PARAM_STATUS, DownloadUtil.STATUS_ERROR_SERVER);
+                        bundle.putString(Constants.PARAM_STATUS, DownloadService.STATUS_ERROR_SERVER);
                         LocalBroadCastUtil.sendBroadcastListener(context, LocalBroadCastUtil.ACTION_DOWNLOAD_FILE_COMPLETED, bundle);
                     }
                 });
@@ -1233,7 +1240,8 @@ public class MainActivity extends BaseActivity implements SocketListener {
     //Audio service
     private void initAudioServiceIntent() {
         if (musicServiceIntent == null) {
-            musicServiceIntent = new Intent(getApplicationContext(), MusicService.class);
+            musicServiceIntent = new Intent(getApplicationContext(), AudioService.class);
+            startService(musicServiceIntent);
         }
     }
 
@@ -1249,18 +1257,8 @@ public class MainActivity extends BaseActivity implements SocketListener {
     }
 
     //start Service
-    public void startAudioService(List<Song> songs) {
-        try {
-            MusicService service = ((MainApplication) getApplication()).getMusicService();
-            if (service != null) {
-                service.setList((ArrayList<Song>) songs);
-                if (service.isReadyToPlay()) {
-                    service.playSong();
-                }
-            }
-        } catch (Exception ex) {
-            CommonUtil.error(self, ex);
-        }
+    public void startAudioService(List<Audio> audios) {
+        ((MainApplication) getApplication()).startAudioService(audios);
     }
 
     protected boolean checkLicense() {
