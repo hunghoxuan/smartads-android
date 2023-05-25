@@ -5,6 +5,8 @@ import android.content.ActivityNotFoundException;
 import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
+import android.media.AudioManager;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -33,11 +35,19 @@ import android.widget.ImageView;
 
 import com.bumptech.glide.Glide;
 import com.github.barteksc.pdfviewer.PDFView;
+import com.google.android.exoplayer2.ExoPlaybackException;
+import com.google.android.exoplayer2.PlaybackParameters;
+import com.google.android.exoplayer2.SimpleExoPlayer;
+import com.google.android.exoplayer2.Timeline;
+import com.google.android.exoplayer2.source.TrackGroupArray;
+import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
+import com.google.android.exoplayer2.ui.AspectRatioFrameLayout;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
 import com.stech.smartads.R;
 import com.stech.smartads.activities.BaseActivity;
 import com.stech.smartads.activities.MainActivity;
 import com.stech.smartads.components.exoplayer.ExoMediaPlayer;
+import com.stech.smartads.components.exoplayer.ListenerPlayer;
 import com.stech.smartads.components.network.NetworkUtility;
 import com.stech.smartads.config.AppConfigs;
 import com.stech.smartads.core.AppData;
@@ -53,9 +63,14 @@ import com.stech.smartads.utils.FileUtility;
 import com.stech.smartads.utils.StringUtil;
 import com.stech.smartads.components.PDFViewer;
 import java.io.File;
+import java.io.IOException;
 import java.util.List;
+
+import android.widget.MediaController;
 import android.widget.RelativeLayout;
+import android.widget.SimpleExpandableListAdapter;
 import android.widget.TextView;
+import android.widget.VideoView;
 
 import im.delight.android.webview.AdvancedWebView;
 
@@ -77,11 +92,16 @@ public abstract class BaseFragment extends Fragment {
     protected long latestReloadTime = 0;
     protected int autoReFreshPageTime = 0;
 
-    protected SimpleExoPlayerView mSEPlayer;
+    // protected SimpleExoPlayerView videoView;
+    protected SimpleExoPlayerView videoView;
+    protected ExoMediaPlayer videoPlayer;
+
     protected ImageView imageView;
     protected AdvancedWebView webView;
     protected PDFView pdfView;
-    protected ExoMediaPlayer videoPlayer;
+
+    protected VideoView livestreamView;
+
     protected TextView hiddenTextView;
 
     protected int screenHeight;
@@ -168,6 +188,16 @@ public abstract class BaseFragment extends Fragment {
         imageView.setClickable(true);
     }
 
+    public VideoView getLivestreamView() {
+        return livestreamView;
+    }
+
+    public void setLivestreamView(VideoView video) {
+        livestreamView = video;
+        livestreamView.bringToFront();
+        livestreamView.setClickable(true);
+    }
+
     public ImageView getImageView() {
         return imageView;
     }
@@ -240,6 +270,85 @@ public abstract class BaseFragment extends Fragment {
         }
 
         return imgView;
+    }
+
+    protected VideoView initLiveStreamView(final VideoView mVideoview) {
+        mVideoview.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            // Close the progress bar and play the video
+            public void onPrepared(MediaPlayer mp) {
+                mVideoview.start();
+            }
+        });
+
+        mVideoview.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+            public void onCompletion(MediaPlayer mp) {
+
+            }
+        });
+        return mVideoview;
+    }
+
+    protected SimpleExoPlayerView initVideoView(SimpleExoPlayerView videoView) {
+        videoPlayer = new ExoMediaPlayer.Builder().setSimpleExoPlayerView(videoView, false).setListener(new ListenerPlayer() {
+            @Override
+            public void onTimelineChanged(Timeline timeline, Object manifest, int reason) {
+
+            }
+
+            @Override
+            public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
+
+            }
+
+            @Override
+            public void onLoadingChanged(boolean isLoading) {
+
+            }
+
+            @Override
+            public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
+                processPlayerStateChanged(playbackState);
+            }
+
+            @Override
+            public void onRepeatModeChanged(int repeatMode) {
+
+            }
+
+            @Override
+            public void onShuffleModeEnabledChanged(boolean shuffleModeEnabled) {
+
+            }
+
+            @Override
+            public void onPlayerError(ExoPlaybackException error) {
+                CommonUtil.error(self, error);
+            }
+
+            @Override
+            public void onPositionDiscontinuity(int reason) {
+
+            }
+
+            @Override
+            public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
+
+            }
+
+            @Override
+            public void onSeekProcessed() {
+
+            }
+        }).build(self);
+
+        if (AppData.getInstance().getServerSetting().getVideoFillMode() == Constants.FILL_MODE_FULL_SCREEN) {
+            videoView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FILL);
+
+        } else if (AppData.getInstance().getServerSetting().getVideoFillMode() == Constants.FILL_MODE_FIT_SCREEN) {
+            videoView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FIT);
+            //videoPlayer.setVideoScalingMode(C.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING);
+        }
+        return videoView;
     }
 
     protected WebView initWebview() {
@@ -643,8 +752,8 @@ public abstract class BaseFragment extends Fragment {
 
     protected void hideVideoView() {
         ((MainApplication)getApplication()).setVideoPlaying(false);
-        if (mSEPlayer != null) {
-            mSEPlayer.setVisibility(View.INVISIBLE);
+        if (videoView != null) {
+            videoView.setVisibility(View.INVISIBLE);
             videoPlayer.pause();
         }
     }
@@ -653,6 +762,14 @@ public abstract class BaseFragment extends Fragment {
         isLoading = false;
         if (webView != null) {
             webView.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    protected void hideLiveView() {
+        isLoading = false;
+        if (livestreamView != null) {
+            livestreamView.stopPlayback();
+            livestreamView.setVisibility(View.INVISIBLE);
         }
     }
 
@@ -670,7 +787,6 @@ public abstract class BaseFragment extends Fragment {
     }
 
     protected void releasePlayer() {
-
         ((MainApplication)getApplication()).setVideoPlaying(false);
 
         if (videoPlayer != null) {
@@ -679,7 +795,11 @@ public abstract class BaseFragment extends Fragment {
         }
     }
 
+
     protected void showImageContent(String url) {
+        if (url.startsWith("/"))
+            url = "file://" + url;
+
         if (AppData.getInstance().getServerSetting().getVideoFillMode() == Constants.FILL_MODE_FIT_SCREEN) {
             Glide.with(self).load(url).error(R.mipmap.ic_launcher)
                     //.override(screenWidth, screenHeight)
@@ -728,29 +848,70 @@ public abstract class BaseFragment extends Fragment {
         }
     }
 
+    protected void showLiveStreamContent(String url) {
+        try {
+//            MediaPlayer mp = new MediaPlayer();
+//            mp.setAudioStreamType(AudioManager.STREAM_MUSIC);
+//            mp.setDataSource(url);
+//            mp.prepareAsync();
+//            mp.start();
 
-    protected void showPDFView() {
+            // Start the MediaController
+            MediaController mediacontroller = new MediaController(getContext());
+            mediacontroller.setAnchorView(livestreamView);
+            // Get the URL from String VideoURL
+            Uri mVideo = Uri.parse(url);
+            //videoView.setMediaController(mediacontroller);
+            livestreamView.setVideoURI(mVideo);
+            livestreamView.start();
+
+        } catch (Exception e) {
+            CommonUtil.error(e);
+        }
+    }
+
+    protected void showVideoContent(ExoMediaPlayer videoPlayer, String url) {
+        videoPlayer.resume();
+        videoPlayer.play(url, AppConfigs.AUTO_LOOP_VIDEO); //loop video when only 1 video in list
+        ((MainApplication) getApplication()).setVideoPlaying(true);
+    }
+
+    protected void processPlayerStateChanged(int playbackState) {
+        switch (playbackState) {
+            case SimpleExoPlayer.STATE_BUFFERING:
+                break;
+            case SimpleExoPlayer.STATE_READY:
+
+                break;
+            case SimpleExoPlayer.STATE_ENDED:
+
+                ((MainApplication)getApplication()).setVideoPlaying(false);
+                checkVideo();
+                break;
+            case SimpleExoPlayer.STATE_IDLE:
+                break;
+        }
+    }
+
+    protected void checkVideo() {
+        if (videoPlayer != null)
+            videoPlayer.resume();
+    }
+
+    protected void hideViews() {
         hideVideoView();
         hideImageView();
         hideWebview();
+        hideLiveView();
+        hidePDFview();
     }
 
-    protected void showVideoView() {
-        hidePDFview();
-        hideImageView();
-        hideWebview();
-    }
-
-    protected void showImageView() {
-        hidePDFview();
-        hideVideoView();
-        hideWebview();
-    }
-
-    protected void showWebView() {
-        hidePDFview();
-        hideVideoView();
-        hideImageView();
+    protected void startView(View view) {
+        if (view != null) {
+            hideViews();
+            view.setVisibility(View.VISIBLE);
+            view.bringToFront();
+        }
     }
 
     protected void showMessage(String msg) {

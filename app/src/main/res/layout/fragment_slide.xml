@@ -4,16 +4,7 @@
     android:id="@+id/fr_main"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
-<!--
-    <ImageView
-        android:id="@+id/img_view"
-        android:scaleType="centerInside"
-        android:background="@color/black"
-        android:layout_width="match_parent"
-        android:src="@drawable/ic_logo_108_tron"
-        android:layout_height="match_parent"
-        />
-        -->
+
     <ImageView
         android:id="@+id/img_view"
         android:background="@color/black"
@@ -24,8 +15,15 @@
         android:scaleType="fitCenter"
         />
 
+    <VideoView
+        android:id="@+id/live_view"
+        android:background="@color/black"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        />
+
     <com.google.android.exoplayer2.ui.SimpleExoPlayerView
-        android:id="@+id/se_player"
+        android:id="@+id/video_view"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:background="@color/black"

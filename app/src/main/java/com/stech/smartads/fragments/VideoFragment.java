@@ -98,64 +98,10 @@ public class VideoFragment extends BaseFragment {
     @Override
     void initUI(View view) {
         // Grabs a reference to the mPlayer view
-        mSEPlayer = (SimpleExoPlayerView) view.findViewById(R.id.se_player);
-        videoPlayer = new ExoMediaPlayer.Builder().setSimpleExoPlayerView(mSEPlayer, false).setListener(new ListenerPlayer() {
-            @Override
-            public void onTimelineChanged(Timeline timeline, Object manifest, int reason) {
-
-            }
-
-            @Override
-            public void onTracksChanged(TrackGroupArray trackGroups, TrackSelectionArray trackSelections) {
-
-            }
-
-            @Override
-            public void onLoadingChanged(boolean isLoading) {
-
-            }
-
-            @Override
-            public void onPlayerStateChanged(boolean playWhenReady, int playbackState) {
-                processPlayerStateChanged(playbackState);
-            }
-
-            @Override
-            public void onRepeatModeChanged(int repeatMode) {
-
-            }
-
-            @Override
-            public void onShuffleModeEnabledChanged(boolean shuffleModeEnabled) {
-
-            }
-
-            @Override
-            public void onPlayerError(ExoPlaybackException error) {
-                showMessage(error.getMessage());
-            }
-
-            @Override
-            public void onPositionDiscontinuity(int reason) {
-
-            }
-
-            @Override
-            public void onPlaybackParametersChanged(PlaybackParameters playbackParameters) {
-
-            }
-
-            @Override
-            public void onSeekProcessed() {
-
-            }
-        }).build(self);
-
-
-        mSEPlayer.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FILL);
+        initVideoView(videoView);
 
         // Should call this methods at the end of declaring UI
-        checkDisplayOfCurrentVideo();
+        checkVideo();
     }
 
     @Override
@@ -252,7 +198,7 @@ public class VideoFragment extends BaseFragment {
         }
     }
 
-    private void checkDisplayOfCurrentVideo() {
+    protected void checkVideo() {
         if(currentData!=null && !currentData.getDisplayType().isEmpty()){
             if(currentData.getDisplayType().equals(DataContentObj.DISPLAY_TYPE_NUMBER)){
                 if(currentDisPlayCount >= currentData.getDisplayDuration()){
@@ -274,7 +220,7 @@ public class VideoFragment extends BaseFragment {
         }
     }
 
-    private void processPlayerStateChanged(int playbackState) {
+    protected void processPlayerStateChanged(int playbackState) {
         switch (playbackState) {
             case SimpleExoPlayer.STATE_BUFFERING:
                 break;
@@ -285,7 +231,7 @@ public class VideoFragment extends BaseFragment {
 
                 ((MainApplication)getApplication()).setVideoPlaying(false);
 
-                checkDisplayOfCurrentVideo();
+                checkVideo();
                 break;
             case SimpleExoPlayer.STATE_IDLE:
                 break;
