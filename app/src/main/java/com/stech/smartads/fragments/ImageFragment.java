@@ -23,7 +23,6 @@ public class ImageFragment extends BaseFragment {
 
     private static final String PARAM_DATA = "data";
 
-
     public ImageFragment() {
         // Required empty public constructor
     }

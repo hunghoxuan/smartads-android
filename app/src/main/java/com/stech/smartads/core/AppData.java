@@ -1598,7 +1598,11 @@ public class AppData  {
 
         String separator = url.startsWith(File.separator) ? "" : File.separator;
 
-        if (url.startsWith("json/") || url.startsWith("/json/")) {
+        if (url.startsWith("rtmp")) { // live
+            // do something later
+        } else if (url.startsWith("rtmp")) { // live
+            // do something later
+        } else if (url.startsWith("json/") || url.startsWith("/json/")) {
             url = AppConfigs.ASSET_ROOT_FOLDER + separator + url;
             if (!url.endsWith(".json"))
                 url = url + ".json";

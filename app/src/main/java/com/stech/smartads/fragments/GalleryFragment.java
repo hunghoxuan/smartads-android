@@ -111,16 +111,16 @@ public class GalleryFragment extends BaseFragment {
 
                 //CommonUtil.log(TAG, "Slide File Url: "+ url);
 
-                if(url.startsWith("http")) {
+                if (url.startsWith("http")) {
                     textSliderView.image(url);
-                }else{
+                } else {
                     File f = new File(url);
                     textSliderView.image(f);
                 }
 
                 //add your extra information
-//            textSliderView.bundle(new Bundle());
-//            textSliderView.getBundle().putString("extra", objs.get(i).getUrl());
+//              textSliderView.bundle(new Bundle());
+//              textSliderView.getBundle().putString("extra", objs.get(i).getUrl());
                 mSlider.addSlider(textSliderView);
             }
         }

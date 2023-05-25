@@ -5,8 +5,11 @@ public class Constants {
 
     public static final String PROTOCOL_HTTP = "http://";
     public static final String PROTOCOL_HTTPS = "https://";
+
     public static final String PROTOCOL_FILE = "file://";
     public static final String PROTOCOL_IMAGE = "image://";
+    public static final String PROTOCOL_LIVESTREAM_RTMP = "rtmp://";
+    public static final String PROTOCOL_LIVESTREAM_RTSP = "rtsp://";
 
 
     public static final String APP_MODE_API = "api";
@@ -23,6 +26,12 @@ public class Constants {
     public static final String TYPE_IMAGE = "image";
     public static final String TYPE_HTML = "html";
     public static final String TYPE_URL = "url";
+
+    public static final String TYPE_M3U8 = "m3u8";
+    public static final String TYPE_MJPG = "mjpg";
+    public static final String TYPE_LIVESTREAM = "live";
+
+
     public static final String TYPE_HIS_VIMES = "his_vimes";
 
     public static final String TYPE_FILE = "file";

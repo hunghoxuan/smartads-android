@@ -168,6 +168,9 @@ public class CommonUtil extends BaseUtil {
         if (ex == null)
             return;
 
+        if (AppConfigs.isDebug)
+            ex.printStackTrace();
+
         error(Constants.TEXT_ERROR + ": ", StringUtil.getErrorMessage(ex));
 
 //        if (AppData.getInstance().getServerSetting().isDebug()) {

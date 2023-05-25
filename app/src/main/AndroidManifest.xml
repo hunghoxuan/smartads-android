@@ -26,6 +26,7 @@
         android:required="false" />-->
 
     <application
+
         android:hardwareAccelerated="true"
         android:name=".core.MainApplication"
         android:networkSecurityConfig="@xml/network_security_config"
@@ -38,7 +39,8 @@
         android:launchMode="singleTask"
         android:supportsRtl="true"
         android:usesCleartextTraffic="true"
-        android:theme="@style/AppTheme">
+        android:theme="@style/AppTheme"
+        >
 
         <!-- Activities -->
         <activity

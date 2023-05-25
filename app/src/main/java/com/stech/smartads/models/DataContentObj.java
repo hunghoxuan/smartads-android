@@ -173,6 +173,7 @@ public class DataContentObj implements Parcelable {
     }
 
     public String getUrl() {
+        // url = "rtmp://semerkandglb.mediatriple.net:1935/semerkandliveedge/semerkand2";
         if (url == null)
             url = "";
         return url;

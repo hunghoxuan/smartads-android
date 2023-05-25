@@ -12,7 +12,7 @@ public class AppConfigs {
 
     public static final boolean isDebug = true; // call Log.e or not
 
-    public static final boolean allowOverlapSchedules = false;
+    public static final boolean allowOverlapSchedules = true;
 
     public final static String DEFAULT_CONTENT_APP = "home";
 
@@ -75,7 +75,7 @@ public class AppConfigs {
     public static final boolean USE_WEBVIEW_TO_SHOW_VIDEO = false;
 
     public static final boolean OVERRIDE_DOWNLOAD_APP = true;
-    public static final boolean CACHE_WEBSITE = false;
+    public static final boolean CACHE_WEBSITE = true;
 
 
     public static final String DEFAULT_SCHEDULE_FILE_API = "json/default_screen.json";

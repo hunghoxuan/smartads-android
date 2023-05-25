@@ -15,6 +15,7 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.RelativeLayout;
+import android.widget.VideoView;
 
 import com.daimajia.slider.library.SliderLayout;
 import com.github.barteksc.pdfviewer.PDFView;
@@ -147,6 +148,11 @@ public class SlideFragment extends BaseFragment {
         initImageView(imageView);
         setEvents(imageView);
 
+        //videoView -> show livestream
+        livestreamView = (VideoView) view.findViewById(R.id.live_view);
+        initLiveStreamView(livestreamView);
+        setEvents(livestreamView);
+
         //pdf View
         pdfView = (PDFView) view.findViewById(R.id.idPDFView);
         setEvents(pdfView);
@@ -154,10 +160,10 @@ public class SlideFragment extends BaseFragment {
         hiddenTextView = view.findViewById(R.id.hiddenTextView);
 
         // show video
-        mSEPlayer = (SimpleExoPlayerView) view.findViewById(R.id.se_player);
-        setEvents(mSEPlayer);
+        videoView = (SimpleExoPlayerView) view.findViewById(R.id.video_view);
+        setEvents(videoView);
 
-        videoPlayer = new ExoMediaPlayer.Builder().setSimpleExoPlayerView(mSEPlayer, false).setListener(new ListenerPlayer() {
+        videoPlayer = new ExoMediaPlayer.Builder().setSimpleExoPlayerView(videoView, false).setListener(new ListenerPlayer() {
             @Override
             public void onTimelineChanged(Timeline timeline, Object manifest, int reason) {
 
@@ -210,10 +216,10 @@ public class SlideFragment extends BaseFragment {
         }).build(self);
 
         if (AppData.getInstance().getServerSetting().getVideoFillMode() == Constants.FILL_MODE_FULL_SCREEN) {
-            mSEPlayer.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FILL);
+            videoView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FILL);
 
         } else if (AppData.getInstance().getServerSetting().getVideoFillMode() == Constants.FILL_MODE_FIT_SCREEN) {
-            mSEPlayer.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FIT);
+            videoView.setResizeMode(AspectRatioFrameLayout.RESIZE_MODE_FIT);
             //videoPlayer.setVideoScalingMode(C.VIDEO_SCALING_MODE_SCALE_TO_FIT_WITH_CROPPING);
         }
 
@@ -330,8 +336,7 @@ public class SlideFragment extends BaseFragment {
                 
             if (data.size() == 0) {
                 if (imageView != null) {
-                    showImageView();
-                    startAnimation(imageView);
+                    startView(imageView);
                 }
                 return;
             }
@@ -351,32 +356,29 @@ public class SlideFragment extends BaseFragment {
             String type = currentData.getDataType();
 
             boolean isOnline = NetworkUtility.getInstance(self).isOnline();
-            endAnimation();
+            endView();
+
+            // test livestream
+            // url = "http://techslides.com/demos/sample-videos/small.mp4";
+            // url = "rtsp://172.30.1.234:18554/camera1";
+            // type = Constants.TYPE_LIVESTREAM;
 
             if (type.equals(Constants.TYPE_IMAGE)) {
-
                 if (url != null && url.trim().isEmpty()) {
                     playSlide(true);
                     return;
                 }
 
                 if (isOnline && AppData.getInstance().getServerSetting().getUseWebViewToShowImage()) {
-                    showWebView();
-                    startAnimation(webView);
+                    startView(webView);
                     showWebContent(webView, currentData);
                     //HUng: hien thi WebView o trong Fragment
-                    CommonUtil.error(TAG, "IMAGE:" + url + " [" + currentData.getDataType() + "]");
+                    // CommonUtil.error(TAG, "IMAGE:" + url + " [" + currentData.getDataType() + "]");
                 } else {
                     try {
-                        showImageView();
-
-                        if (url.startsWith("/"))
-                            url = "file://" + url;
-
-                        startAnimation(imageView);
+                        startView(imageView);
                         showImageContent(url);
-
-                        CommonUtil.error(TAG, "Image: " + url + " [ Duration: " + currentData.getDisplayDuration() + ". Type: " + currentData.getDataType() + " ]");
+                        // CommonUtil.error(TAG, "Image: " + url + " [ Duration: " + currentData.getDisplayDuration() + ". Type: " + currentData.getDataType() + " ]");
                     } catch (Exception ex) {
                         CommonUtil.error(getContext(), ex);
                         playSlide(true);
@@ -385,55 +387,58 @@ public class SlideFragment extends BaseFragment {
                 }
 
             } else if (currentData.getUrl().toLowerCase().endsWith(".pdf")) {
-                showPDFView();
-                startAnimation(pdfView);
-
+                startView(pdfView);
                 showPDFContent(pdfView, currentData);
 
                 //HUng: hien thi WebView o trong Fragment
-                CommonUtil.error(TAG, "PDF:" + url + " [" + currentData.getDataType() + "]");
+                // CommonUtil.error(TAG, "PDF:" + url + " [" + currentData.getDataType() + "]");
 
             } else if (type.equals(Constants.TYPE_HTML) || type.equals(Constants.TYPE_TEXT)  || type.equals(Constants.TYPE_SLIDE)  || type.equals(Constants.TYPE_URL)) {
-                showWebView();
-
                 url = currentData.getUrl();
 
                 if (url != null && !url.isEmpty() && url.startsWith("http") && !NetworkUtility.getInstance(self).isOnline()) {
                     playSlide(true);
                 }
-                startAnimation(webView);
-
+                startView(webView);
                 showWebContent(webView, currentData);
 
                 //HUng: hien thi WebView o trong Fragment
-                CommonUtil.error(TAG, "HTML:" + url + " [" + currentData.getDataType() + "]");
+                // CommonUtil.error(TAG, "HTML:" + url + " [" + currentData.getDataType() + "]");
+
+            } else if (type.equals(Constants.TYPE_LIVESTREAM)) {
+
+                if (url != null && url.trim().isEmpty()) {
+                    playSlide(true);
+                    return;
+                }
+                try {
+                    startView(videoView);
+                    showLiveStreamContent(url);
+                    // CommonUtil.error(TAG, "LiveStream: " + url + " [ Duration: " + currentData.getDisplayDuration() + ". Type: " + currentData.getDataType() + " ]");
+                } catch (Exception ex) {
+                    CommonUtil.error(getContext(), ex);
+                    playSlide(true);
+                    return;
+                }
 
             } else {
-
                 if (url != null && url.trim().isEmpty()) {
                     playSlide(true);
                     return;
                 }
 
                 if (isOnline && AppData.getInstance().getServerSetting().getUseWebViewToShowImage()) {
-
-                    showWebView();
-                    startAnimation(webView);
+                    startView(webView);
                     showWebContent(webView, currentData);
 
                     //HUng: hien thi WebView o trong Fragment
-                    CommonUtil.error(TAG, "IMAGE:" + url + " [" + currentData.getDataType() + "]");
+                    // CommonUtil.error(TAG, "IMAGE:" + url + " [" + currentData.getDataType() + "]");
 
                 } else {
+                    startView(videoView);
+                    showVideoContent(videoPlayer, url);
 
-                    showVideoView();
-
-                    startAnimation(mSEPlayer);
-
-                    videoPlayer.resume();
-                    videoPlayer.play(url, AppConfigs.AUTO_LOOP_VIDEO); //loop video when only 1 video in list
-                    ((MainApplication) getApplication()).setVideoPlaying(true);
-                    CommonUtil.error(TAG, "VIDEO: " + url + " [ Duration: " + currentData.getDisplayDuration() + ". Type: " + currentData.getDataType() + " ]");
+                    // CommonUtil.error(TAG, "VIDEO: " + url + " [ Duration: " + currentData.getDisplayDuration() + ". Type: " + currentData.getDataType() + " ]");
                 }
             }
 
@@ -494,7 +499,7 @@ public class SlideFragment extends BaseFragment {
         }
     }
 
-    private void processPlayerStateChanged(int playbackState) {
+    protected void processPlayerStateChanged(int playbackState) {
         switch (playbackState) {
             case SimpleExoPlayer.STATE_BUFFERING:
                 break;
@@ -512,14 +517,14 @@ public class SlideFragment extends BaseFragment {
         }
     }
 
-    private void startAnimation() {
-        startAnimation(currentView);
+    private void startView() {
+        startView(currentView);
     }
 
-    private void startAnimation(View view) {
+    @Override
+    protected void startView(View view) {
+        super.startView(view);
         if (view != null) {
-            view.setVisibility(View.VISIBLE);
-            view.bringToFront();
             currentView = view;
             try {
                 Animation animFadeIn = AnimationUtils.loadAnimation(self, R.anim.fade_in);
@@ -532,7 +537,7 @@ public class SlideFragment extends BaseFragment {
     }
 
 
-    private void endAnimation() {
+    private void endView() {
         if (currentView != null) {
             try {
                 Animation animFadeIn = AnimationUtils.loadAnimation(self, R.anim.fade_out);
@@ -550,7 +555,7 @@ public class SlideFragment extends BaseFragment {
         }
     }
 
-    private void endAnimation(View view) {
+    private void endView(View view) {
         try {
             Animation animFadeIn = AnimationUtils.loadAnimation(self, R.anim.fade_out);
             view.startAnimation(animFadeIn);
