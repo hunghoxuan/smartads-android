@@ -1,5 +1,8 @@
 package com.stech.smartads.models;
 
+import android.app.Activity;
+
+import com.stech.smartads.activities.BaseActivity;
 import com.stech.smartads.components.audio.Audio;
 import com.stech.smartads.config.Constants;
 import com.stech.smartads.core.AppData;
@@ -38,6 +41,8 @@ public class Schedule {
     private List<Audio> arrAudios;
     private JSONArray jsonSongs;
 
+    private Activity activity;
+
     public Schedule(){
         super();
     }
@@ -73,6 +78,10 @@ public class Schedule {
 
     public JSONArray getDataJsonArray() {
         return this.dataJson;
+    }
+
+    public void setActivity(BaseActivity activity) {
+        this.activity = activity;
     }
 
     public Schedule(JSONObject jsonObj)
@@ -202,7 +211,27 @@ public class Schedule {
     }
 
     public void addFrameLayouts(List<LayoutFrameObj> layouts) {
-        getFrameLayouts().addAll(layouts);
+        for (int i = 0; i < layouts.size(); i++) {
+            if (layouts.get(i).getWidthPercent() == 100 && layouts.get(i).getHeightPercent() == 100) {
+                getFrameLayouts().add(0, layouts.get(i)); // add biggest frame to background (first layout).
+                continue;
+            }
+            boolean added = false;
+            for (int j = 0; j < getFrameLayouts().size(); j ++) {
+                if (this.getFrameLayouts().get(j).getTopPercent() > layouts.get(i).getTopPercent()
+                        && this.getFrameLayouts().get(j).getLeftPercent() > layouts.get(i).getLeftPercent()
+                        && this.getFrameLayouts().get(j).getRightPercent() < layouts.get(i).getRightPercent()
+                        && this.getFrameLayouts().get(j).getBottomPercent() < layouts.get(i).getBottomPercent()
+                ) {
+                    getFrameLayouts().add(j, layouts.get(i)); // add biggest frame to background (first layout).
+                    added = true;
+                    break;
+                }
+            }
+
+            if (!added)
+                getFrameLayouts().add(layouts.get(i));
+        }
     }
 
     public void addFrameLayouts(Schedule schedule) {
