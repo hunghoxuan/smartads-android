@@ -242,21 +242,60 @@ public class LayoutFrameObj implements Parcelable {
             top = (int) y;
     }
 
+    public int getWidthPercent() {
+        return this.percentOfScreenWidth;
+    }
+
+    public int getHeightPercent() {
+        return this.percentOfScreenHeight;
+    }
+
+    public double getLeftPercent() {
+        return this.positionMarginLeft;
+    }
+
+    public double getTopPercent() {
+        return this.positionMarginTop;
+    }
+
+    public double getRightPercent() {
+        return this.positionMarginLeft + (double) this.percentOfScreenWidth;
+    }
+
+    public double getBottomPercent() {
+        return this.positionMarginTop + (double) this.percentOfScreenHeight;
+    }
+
     public int getWidth(Activity act) {
         return width > 0 ? width : getPxValue(act,true, percentOfScreenWidth);
     }
 
+    public int getWidth() {
+        return this.getWidth(this.getActivity());
+    }
 
     public int getHeight(Activity act) {
         return height > 0 ? height : getPxValue(act,false, percentOfScreenHeight);
+    }
+
+    public int getHeight() {
+        return this.getHeight(this.getActivity());
     }
 
     public int getLeft(Activity act) {
         return (left > 0 ? left : getPxValue(act,true, positionMarginLeft)) + CommonUtil.getScreenMarginLeft();
     }
 
+    public int getLeft() {
+        return this.getLeft(this.getActivity());
+    }
+
     public int getTop(Activity act) {
         return (top > 0 ? top : getPxValue(act,false, positionMarginTop)) + CommonUtil.getScreenMarginTop();
+    }
+
+    public int getTop() {
+        return this.getTop(this.getActivity());
     }
 
     public String getDataContentType() {
@@ -268,7 +307,7 @@ public class LayoutFrameObj implements Parcelable {
     }
 
     public BaseActivity getActivity() {
-        return activity;
+        return this.activity != null ? this.activity : AppData.getInstance().getCurrentActivity();
     }
 
     public void setActivity(BaseActivity activity) {

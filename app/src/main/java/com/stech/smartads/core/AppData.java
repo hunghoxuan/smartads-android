@@ -400,10 +400,10 @@ public class AppData  {
 
         if (schedule != null)
             currentSchedule = schedule;
-        if (AppConfigs.allowOverlapSchedules && currentSchedule != null) {
-            Schedule defaultSchedule = this.getDefaultSchedule(); // test
-            currentSchedule.addFrameLayouts(defaultSchedule, 0); // also play default Schedule at background
-        }
+//        if (AppConfigs.allowOverlapSchedules && currentSchedule != null) {
+//            Schedule defaultSchedule = this.getDefaultSchedule(); // test
+//            currentSchedule.addFrameLayouts(defaultSchedule, 0); // also play default Schedule at background
+//        }
         return currentSchedule;
     }
 

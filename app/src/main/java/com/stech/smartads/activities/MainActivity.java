@@ -545,6 +545,7 @@ public class MainActivity extends BaseActivity implements SocketListener {
             //showMessage( "Không tìm được kịch bản để hiển thị"); // Full screen
             layouts.clear();
             LayoutFrameObj layout = new LayoutFrameObj(AppConfigs.HOMEPAGE);
+            layout.setActivity(self);
             layouts.add(layout);
         } else {
             layouts = schedule.getFrameLayouts();
@@ -575,9 +576,9 @@ public class MainActivity extends BaseActivity implements SocketListener {
         //set fragment content
         addFragment(frame, layout.getFragmentContent());
 
-        params = new FrameLayout.LayoutParams(layout.getWidth(self), layout.getHeight(self));//width and height
-        params.leftMargin = layout.getLeft(self);
-        params.topMargin = layout.getTop(self);
+        params = new FrameLayout.LayoutParams(layout.getWidth(), layout.getHeight());//width and height
+        params.leftMargin = layout.getLeft();
+        params.topMargin = layout.getTop();
 
         int screenHeight = (int) (AppData().getScreenHeight() * 0.99);
         int screenWidth = (int) (AppData().getScreenWidth() * 0.99);
@@ -711,6 +712,7 @@ public class MainActivity extends BaseActivity implements SocketListener {
     public void addFragment(double x, double y, double w, double h, List<DataContentObj> content, String name) {
         LayoutFrameObj layout = new LayoutFrameObj();
         layout.setDataContentType(Constants.TYPE_SLIDE);
+        layout.setActivity(self);
         layout.setWidth(w);
         layout.setHeight(h);
         layout.setLeft(x);
@@ -1044,6 +1046,7 @@ public class MainActivity extends BaseActivity implements SocketListener {
     private void updateFrameContent(JSONObject frameJson) {
         try {
             LayoutFrameObj frame = new LayoutFrameObj(frameJson);
+            frame.setActivity(self);
             //check if parse frame un-successfully
             if (frame.getId() == 0) {
                 return;
@@ -1052,6 +1055,7 @@ public class MainActivity extends BaseActivity implements SocketListener {
             int size = AppData.getInstance().getCurrentSchedule().getFrameLayouts().size();
             for (int i = 0; i < size; i++) {
                 LayoutFrameObj currentFrame = AppData.getInstance().getCurrentSchedule().getFrameLayouts().get(i);
+                currentFrame.setActivity(self);
                 if (currentFrame.getId() == frame.getId()) {
                     AppData.getInstance().getCurrentSchedule().getFrameLayouts().add(i, frame);
                     break;
