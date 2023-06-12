@@ -371,7 +371,7 @@ public class AppData  {
         long currentTime = -1;
 
         List<Schedule> arrSchedules = this.getSchedules(); // getSchedules();
-
+        Schedule defaultSchedule = null; // it should be added at the end, because it is shown in background
         for (int i = 0; i < arrSchedules.size(); i++) {
 
             currentTime =  DateTimeUtil.getCurrentTime(((MainApplication)context.getApplicationContext()).getCurrentCalendar(), DateTimeUtil.MILLISECOND);
@@ -389,8 +389,14 @@ public class AppData  {
                 if (AppConfigs.allowOverlapSchedules) {
                     if (schedule == null)
                         schedule = arrSchedules.get(i);
-                    else
-                        schedule.addFrameLayouts(arrSchedules.get(i));
+                    else {
+                        if (arrSchedules.get(i).getId() == 0) {
+                            defaultSchedule = arrSchedules.get(i);
+                        } else {
+                            schedule.addFrameLayouts(arrSchedules.get(i));
+                        }
+                    }
+
                 } else {
                     schedule = arrSchedules.get(i);
                     break;
@@ -400,10 +406,9 @@ public class AppData  {
 
         if (schedule != null)
             currentSchedule = schedule;
-//        if (AppConfigs.allowOverlapSchedules && currentSchedule != null) {
-//            Schedule defaultSchedule = this.getDefaultSchedule(); // test
-//            currentSchedule.addFrameLayouts(defaultSchedule, 0); // also play default Schedule at background
-//        }
+        if (AppConfigs.allowOverlapSchedules && currentSchedule != null) {
+            currentSchedule.addFrameLayouts(defaultSchedule, 0); // also play default Schedule at background
+        }
         return currentSchedule;
     }
 
