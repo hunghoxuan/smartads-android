@@ -108,7 +108,7 @@ function getDataFromJson(json) {
     if (json != null && json != undefined) {
         let obj = JSON.parse(json);
         if ((!isEmpty(obj.status) && obj.status.toLowerCase() == 'fail') || (!isEmpty(obj.code) && obj.code != 200)) {
-            alert("Status: " + obj.status + ". Code: " + obj.code + ". Error message: " + obj.message);
+            alert("JSON: " + json);
             return [];
         }
         data = isEmpty(obj.data) ? json : obj.data;

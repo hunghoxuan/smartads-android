@@ -325,6 +325,7 @@ public class ServerSetting {
     }
 
     public String getLogoPosition() {
+        logoPosition = AppConfigs.SHOW_LOGO_POSITION; // temporary just for SOJO
         return logoPosition;
     }
 

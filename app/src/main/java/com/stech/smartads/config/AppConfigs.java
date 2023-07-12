@@ -10,9 +10,9 @@ public class AppConfigs {
 
     public final static String LICENSE_KEY = "DEMO";
 
-    public static final boolean isDebug = true; // call Log.e or not
+    public static final boolean isDebug = false; // call Log.e or not
 
-    public static final boolean allowOverlapSchedules = true;
+    public static final boolean allowOverlapSchedules = false;
 
     public final static String DEFAULT_CONTENT_APP = "home";
 
@@ -23,7 +23,7 @@ public class AppConfigs {
 
     public final static int BACK_BUTTON_WIDTH = 100;
 
-    public final static String SHOW_LOGO_POSITION = "top_left";
+    public final static String SHOW_LOGO_POSITION = "1235"; // "top_left"
 
     public static final int SHOW_LOGO_OPACITY = 0; //0.0-1.0f
 
@@ -40,7 +40,7 @@ public class AppConfigs {
     public final static int SCREEN_MARGIN_BOTTOM = 0;
 
     public final static int MAIN_TIMER = 5; //seconds used in MainApplication
-    public final static int SETTING_WEBSITE_TIMER = 30; //seconds
+    public final static int SETTING_WEBSITE_TIMER = 60; //seconds
 
     public static final int API_GET_SCHEDULES_TIMER = 1*60; // second
     public static final int API_GET_SCHEDULES_TIMER_MAX = 5*60; // second

@@ -600,8 +600,11 @@ public class CommonUtil extends BaseUtil {
             arr = position.split("x");
         else if (position.contains("_"))
             arr = position.split("_");
-        else if (position.contains(":"))
+        else
             arr = position.split(":");
+
+        if (arr.length == 1)
+            arr = new String[] { arr[0], ""};
 
         if (arr[0].equalsIgnoreCase("top") || arr[1].equalsIgnoreCase("top")) {
             y = margin_top;
@@ -621,7 +624,7 @@ public class CommonUtil extends BaseUtil {
             x = margin_left;
             gravity = Gravity.LEFT;
             //width = 0;
-        } else if (arr[1].equalsIgnoreCase("right") || arr[1].equalsIgnoreCase("right")) {
+        } else if (arr[1].equalsIgnoreCase("right") || arr[0].equalsIgnoreCase("right")) {
             x = margin_left; //screenWidth - margin - width;
             gravity = Gravity.RIGHT;
         } else {

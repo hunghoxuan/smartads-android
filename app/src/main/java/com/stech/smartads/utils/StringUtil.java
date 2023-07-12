@@ -219,6 +219,8 @@ public class StringUtil extends BaseUtil {
     }*/
 
     public static double convertStringToDecimalNumber(String strNumber) {
+        if (strNumber == null || strNumber.isEmpty())
+            return 0;
         DecimalFormat decimalFormat = new DecimalFormat();
         String decimalSeparator = String.valueOf(decimalFormat.getDecimalFormatSymbols().getDecimalSeparator());
 
