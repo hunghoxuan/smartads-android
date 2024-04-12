@@ -4,11 +4,11 @@ package com.stech.smartads.config;
 public class AppConfigs {
 
     public final static String APP_NAME = "SMARTADS";
-    public final static String AUTHOR = "STECH.VN";
-    public final static String HOMEPAGE = "https://stech.vn";
+    public final static String AUTHOR = "";
+    public final static String HOMEPAGE = "";
     public final static String SOURCE_PACKAGE = "com.stech.smartads";
 
-    public final static String LICENSE_KEY = "DEMO";
+    public final static String LICENSE_KEY = "NONE"; // DEMO or NONE or empty.
 
     public static final boolean isDebug = false; // call Log.e or not
 
@@ -23,7 +23,7 @@ public class AppConfigs {
 
     public final static int BACK_BUTTON_WIDTH = 100;
 
-    public final static String SHOW_LOGO_POSITION = "1235"; // "top_left"
+    public final static String SHOW_LOGO_POSITION = "1235"; // "top_left" // sojo: 1235
 
     public static final int SHOW_LOGO_OPACITY = 0; //0.0-1.0f
 

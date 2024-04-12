@@ -841,6 +841,8 @@ public class MainActivity extends BaseActivity implements SocketListener {
     private String getWarningInfo() {
         if (AppConfigs.LICENSE_KEY.equalsIgnoreCase("DEMO"))
             return "DEMO LICENSE";
+        if (AppConfigs.LICENSE_KEY.equalsIgnoreCase("NONE"))
+            return "";
         if (AppConfigs.isDebug)
             return AppData().getAppMode() + " " + AppData().getCurrentUrl() + " " + CacheManager.getAppMode(self);
         else

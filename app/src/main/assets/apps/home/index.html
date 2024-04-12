@@ -192,17 +192,20 @@
                var control = document.getElementById('data');
                var html = '';
                for (let i = 0; i < data.length; i++) {
-                    let content = `<li>
-                                        <div onclick="openScreen('@{url}')">
-                                             <h2>
-                                              {title}
-                                            </h2>
-                                        </div>
-                                    </li>`;
-                    //alert(data[i].url);
-                    content = content.replace('{title}', data[i].title);
-                    content = content.replace('{url}', data[i].url);
-                    html += content;
+                  if (!data[i] || !data[i].title || !data[i].url)
+                    continue;
+
+                  let content = `<li>
+                                      <div onclick="openScreen('@{url}')">
+                                           <h2>
+                                            {title}
+                                          </h2>
+                                      </div>
+                                  </li>`;
+                  //alert(data[i].url);
+                  content = content.replace('{title}', data[i].title);
+                  content = content.replace('{url}', data[i].url);
+                  html += content;
                }
                //alert(html);
                control.innerHTML = html;
@@ -216,20 +219,22 @@
                control = document.getElementById('data1');
                html = '';
                for (let i = 0; i < data.length; i++) {
-                    let content = `<li>
-                                        <div onclick="openScreen('@{url}')">
-                                             <h2>
-                                              {title}
-                                            </h2>
-                                            {description}
-                                        </div>
-                                    </li>`;
-                    //alert(data[i].url);
-                    content = content.replace('{title}', data[i].title);
-                    content = content.replace('{url}', data[i].url);
-                    content = content.replace('{description}', data[i].description + ' ' + data[i].modified_date);
+                  if (!data[i] || !data[i].title || !data[i].url)
+                    continue;
+                  let content = `<li>
+                                      <div onclick="openScreen('@{url}')">
+                                           <h2>
+                                            {title}
+                                          </h2>
+                                          {description}
+                                      </div>
+                                  </li>`;
+                  //alert(data[i].url);
+                  content = content.replace('{title}', data[i].title);
+                  content = content.replace('{url}', data[i].url);
+                  content = content.replace('{description}', data[i].description + ' ' + data[i].modified_date);
 
-                    html += content;
+                  html += content;
                }
                //alert(html);
                control.innerHTML = html;

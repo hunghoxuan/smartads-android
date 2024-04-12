@@ -4,8 +4,8 @@ package com.stech.smartads.config;
 public class APIConfigs {
     public static final int REQUEST_TIME_OUT = 5000;
 
-    public static final String SERVER_URL = "https://stech.vn/smartads";
-    public static final String HOMEPAGE_URL = "https://stech.vn";
+    public static final String SERVER_URL = "http://10.254.23.168/smartads-stech-php";
+    public static final String HOMEPAGE_URL = "";
 
     //Demo server moza
     public static final String BASE_URL = "/backend/web/index.php/smartscreen/api";

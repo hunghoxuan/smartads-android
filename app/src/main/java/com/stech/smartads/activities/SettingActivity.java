@@ -162,54 +162,68 @@ public class SettingActivity extends BaseActivity {
         LocalBroadCastUtil.unRegisterBroadCast(this,broadcastOpenMainScreenReceiver);
     }
 
+    private void gotoAPI() {
+        //finish setting
+        AppData.isUserSetting = false;
+        CacheManager.storeAppMode(self, Constants.APP_MODE_API);
+        if (NetworkUtility.getInstance(self).isNetworkAvailable())
+            showMessage(Constants.TEXT_START_CONNECTING + " " + Constants.TEXT_SERVER + ": " + txtServerIP.getText().toString());
+
+        registerDevice();
+    }
+
+    private void gotoHomepage() {
+        //finish setting
+        AppData.isUserSetting = false;
+        CacheManager.storeAppMode(self, Constants.APP_MODE_HOMEPAGE);
+        if (NetworkUtility.getInstance(self).isNetworkAvailable())
+            showMessage(Constants.TEXT_START_DISPLAY + " " + Constants.TEXT_WEBSITE + ": " + txtHomepage.getText().toString());
+        getSchedulesAndGotoMain();
+    }
+
     private void onClickLogin(){
         resetHandler();
-
-        String serverAddress = txtServerIP.getText().toString();
-        //check if ip is empty
-        if(serverAddress.isEmpty()) {
-            showMessage(Constants.TEXT_SERVER_REQUIRED);
-            return;
-        }
+        String serverAddress = txtServerIP != null ? txtServerIP.getText().toString().trim() : "";
+//        //check if ip is empty
+//        if(serverAddress.isEmpty()) {
+//            showMessage(Constants.TEXT_SERVER_REQUIRED);
+//            return;
+//        }
 
         //check valid url
-        String url = StringUtil.getFullUrl(serverAddress);
-        url = url.trim();
+        if (!serverAddress.isEmpty()) {
+            serverAddress = StringUtil.getFullUrl(serverAddress).trim();
 
-        if(!Patterns.WEB_URL.matcher(url).matches()) {
-            showMessage(Constants.TEXT_SERVER + " [ " + url + " ] " + Constants.TEXT_INVALID);
-            return;
+            if (!Patterns.WEB_URL.matcher(serverAddress).matches()) {
+                showMessage(Constants.TEXT_SERVER + " [ " + serverAddress + " ] " + Constants.TEXT_INVALID);
+                return;
+            }
         }
 
+        String homepage = txtHomepage != null ? txtHomepage.getText().toString().trim() : "";
+        cacheConfigureIP(serverAddress);
+        cacheHomePage(homepage);
+
         //process to get cache Ip address & Port
-        if (txtServerIP != null && !txtServerIP.getText().toString().isEmpty())
-            cacheConfigureIP(txtServerIP.getText().toString());
+        if (!serverAddress.isEmpty() && homepage.isEmpty()) {
+            gotoAPI();
+        } else if (serverAddress.isEmpty() && !homepage.isEmpty()) {
+            gotoHomepage();
+        } else if (serverAddress.isEmpty() && homepage.isEmpty()) {
+            showMessage("Please enter Server URL or Homepage URL !!");
+        } else {
+            CommonUtil.showConfirmationDialog(self, Constants.TEXT_SELECT_APP_MODE, Constants.TEXT_SERVER, Constants.TEXT_HOMEPAGE, true, new IConfirmation() {
+                @Override
+                public void onPositive() {
+                    gotoAPI();
+                }
 
-        if (txtHomepage != null && !txtHomepage.getText().toString().isEmpty())
-            cacheHomePage(txtHomepage.getText().toString());
-
-        CommonUtil.showConfirmationDialog(self, Constants.TEXT_SELECT_APP_MODE, Constants.TEXT_SERVER, Constants.TEXT_HOMEPAGE, true, new IConfirmation() {
-            @Override
-            public void onPositive() {
-                //finish setting
-                AppData.isUserSetting = false;
-                CacheManager.storeAppMode(self, Constants.APP_MODE_API);
-                if (NetworkUtility.getInstance(self).isNetworkAvailable())
-                    showMessage( Constants.TEXT_START_CONNECTING + " " + Constants.TEXT_SERVER + ": " + txtServerIP.getText().toString());
-
-                registerDevice();
-            }
-
-            @Override
-            public void onNegative() {
-                //finish setting
-                AppData.isUserSetting = false;
-                CacheManager.storeAppMode(self, Constants.APP_MODE_HOMEPAGE);
-                if (NetworkUtility.getInstance(self).isNetworkAvailable())
-                    showMessage( Constants.TEXT_START_DISPLAY + " " + Constants.TEXT_WEBSITE + ": " + txtHomepage.getText().toString());
-                getSchedulesAndGotoMain();
-            }
-        });
+                @Override
+                public void onNegative() {
+                    gotoHomepage();
+                }
+            });
+        }
     }
 
 

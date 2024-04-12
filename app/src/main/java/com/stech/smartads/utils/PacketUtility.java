@@ -64,9 +64,8 @@ public class PacketUtility extends BaseUtil {
     }
 
     public static boolean checkLicense(Context context) {
-        if (AppConfigs.APP_NAME.equals("DEMO") || AppConfigs.APP_NAME.isEmpty())
+        if (AppConfigs.APP_NAME.equalsIgnoreCase("DEMO") || AppConfigs.APP_NAME.isEmpty() || AppConfigs.LICENSE_KEY.equalsIgnoreCase("NONE"))
             return true;
-
         String license = CacheManager.getLicenseKey(context);
         String appLicense = PacketUtility.getLicense(context, true); // license with year
         String appLicense2 = PacketUtility.getLicense(context, false); // without year (permanent license)
